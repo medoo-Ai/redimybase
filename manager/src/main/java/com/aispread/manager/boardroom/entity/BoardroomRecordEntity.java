@@ -68,16 +68,9 @@ public class BoardroomRecordEntity extends IdEntity<String> {
     private Date endTime;
 
     /**
-     * 会议内容
-     */
-    @TableField("content")
-    private String content;
-
-    /**
      * 创建时间
      */
     @TableField("create_time")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
@@ -97,18 +90,6 @@ public class BoardroomRecordEntity extends IdEntity<String> {
      */
     @TableField("creator")
     private String creator;
-
-    /**
-     * 备注
-     */
-    @TableField("remark")
-    private String remark;
-
-    /**
-     * 参会人员ID(逗号分隔)
-     */
-    @TableField("attend_user_id")
-    private String attendUserId;
 
     /**
      * 状态(0:正常,1:删除)
