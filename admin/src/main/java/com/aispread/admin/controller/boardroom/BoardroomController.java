@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import com.alibaba.fastjson.annotation.JSONField;import java.util.Date;
+import java.util.Date;
 
 /**
  * 会议室Controller
@@ -40,7 +40,7 @@ public class BoardroomController extends TableController<String, BoardroomEntity
         TableModel<BoardroomEntity> model = new TableModel<>();
         Page<BoardroomEntity> page = (Page<BoardroomEntity>) buildPageRequest(request);
         if (page == null) {
-            page = new Page<>(1, 8);
+            page = new Page<>(1, 10);
         }
         QueryWrapper<BoardroomEntity> queryWrapper = buildWrapper(getQueryColumn(request), getQueryValue(request));
         if (null == queryWrapper) {
@@ -120,10 +120,8 @@ public class BoardroomController extends TableController<String, BoardroomEntity
         }
     }
 
-
     @Autowired
     private BoardroomServiceImpl service;
-
 
     @Override
     protected BoardroomServiceImpl getService() {

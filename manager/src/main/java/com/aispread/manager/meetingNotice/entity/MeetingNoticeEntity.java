@@ -1,33 +1,31 @@
-package com.aispread.manager.boardroom.entity;
+package com.aispread.manager.meetingNotice.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.TableField;
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.redimybase.framework.mybatis.id.IdEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
  * <p>
- * 会议室表
+ *
  * </p>
  *
  * @author vim
- * @since 2018-12-28
+ * @since 2019-01-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_boardroom")
-public class BoardroomEntity extends IdEntity<String> {
+@TableName("t_meeting_notice")
+public class MeetingNoticeEntity extends IdEntity<String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,41 +33,52 @@ public class BoardroomEntity extends IdEntity<String> {
     private String id;
 
     /**
-     * 会议室名称
+     * 通知标题
      */
-    @TableField("name")
-    private String name;
+    @TableField("title")
+    private String title;
 
     /**
-     * 所属组织ID
+     * 会议议题
      */
-    @TableField("org_id")
-    private String orgId;
+    @TableField("content")
+    private String content;
 
     /**
-     * 会议室地点
+     * 会议室ID
      */
-    @TableField("address")
-    private String address;
+    @TableField("room_id")
+    private String roomId;
+
+    /**
+     * 开始时间
+     */
+    @TableField("start_time")
+    private Date startTime;
+
+    /**
+     * 结束时间
+     */
+    @TableField("end_time")
+    private Date endTime;
 
     /**
      * 创建时间
      */
     @TableField("create_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-
-    /**
-     * 修改时间
-     */
-    @TableField("update_time")
-    private Date updateTime;
 
     /**
      * 创建人ID
      */
     @TableField("creator_id")
     private String creatorId;
+
+    /**
+     * 发布人
+     */
+    @TableField("creator")
+    private String creator;
 
     /**
      * 修改人ID
@@ -84,19 +93,19 @@ public class BoardroomEntity extends IdEntity<String> {
     private String reviser;
 
     /**
-     * 创建人
+     * 修改时间
      */
-    @TableField("creator")
-    private String creator;
+    @TableField("update_time")
+    private Date updateTime;
 
     /**
-     * 备注
+     * 参会人员ID(逗号分隔)
      */
-    @TableField("remark")
-    private String remark;
+    @TableField("attend_user_id")
+    private String attendUserId;
 
     /**
-     * 状态(0:正常,1:删除)
+     * 状态(0:已保存,1:已发布,2:删除)
      */
     @TableField("status")
     private Integer status;
@@ -110,7 +119,9 @@ public class BoardroomEntity extends IdEntity<String> {
     }
 
     public static class Status {
-        public static final Integer 正常 = 0;
-        public static final Integer 删除 = 1;
+        public static final Integer 已保存 = 0;
+        public static final Integer 已发布 = 1;
+        public static final Integer 删除 = 2;
     }
+
 }

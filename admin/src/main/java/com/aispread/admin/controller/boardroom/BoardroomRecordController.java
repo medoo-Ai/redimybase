@@ -42,7 +42,6 @@ public class BoardroomRecordController extends TableController<String, Boardroom
     @Override
     public void beforeSave(BoardroomRecordEntity entity) {
         UserEntity currentUser = SecurityUtil.getCurrentUser();
-
         if (null == currentUser) {
             throw new BusinessException(R.失败, "用户凭证过期,请尝试重新登录");
         }
@@ -70,6 +69,11 @@ public class BoardroomRecordController extends TableController<String, Boardroom
     @PostMapping("reserveBoardRoom")
     @ApiOperation("预定会议室")
     public R<?> reserveBoardRoom(BoardroomRecordEntity entity) {
+        BoardroomEntity boardroomEntity = boardroomService.getById(entity.getRoomId());
+        if(boardroomEntity == null){
+            throw new BusinessException(R.失败, "会议室不存在");
+        }
+        entity.setRoomName(boardroomEntity.getName());
         if (!service.reserveValidate(entity)) {
             throw new BusinessException(R.失败, "会议室安排时间有冲突");
         }
@@ -92,10 +96,11 @@ public class BoardroomRecordController extends TableController<String, Boardroom
             }
             //当在开始时间和结束时间区间内时，将区间值拼接给对象区间属性
             if (setFlag) {
+                int tempIndex = i + 1;
                 if(StringUtils.isEmpty(entity.getTimeSection())){
-                    entity.setTimeSection(i + ",");
+                    entity.setTimeSection(tempIndex + ",");
                 } else {
-                    entity.setTimeSection(entity.getTimeSection() + i + ",");
+                    entity.setTimeSection(entity.getTimeSection() + tempIndex + ",");
                 }
             }
         }
@@ -175,4 +180,5 @@ public class BoardroomRecordController extends TableController<String, Boardroom
     protected BoardroomRecordServiceImpl getService() {
         return service;
     }
+
 }
