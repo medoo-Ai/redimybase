@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aispread.manager.flowable.mapper.RuTaskMapper">
+
+
+    <select id="taskList" resultType="com.aispread.manager.flowable.dto.FlowTodoTask">
+        SELECT
+        t.task_id,
+        t.title,
+        t.STATUS,
+        t.node_name,
+        t.start_user,
+        t.approval_user,
+        t.remain_time,
+        t.create_time,
+        t.assignee,
+        t.business_id,
+        t.business_name,
+        t.category_name,
+        t.category_id,
+        t.start_time,
+        t.instance_id,
+        t.category_ico,
+        t.category_theme_color,
+        IFNULL( t.distribute_status, 0 ) as distribute_status,
+        t.distribute_assignee
+        FROM
+        (
+        SELECT
+        CONCAT( '[', t2.`name`, '] - ', t5.user_name, '发起于', DATE_FORMAT( t4.START_TIME_, '%Y-%m-%d %H:%i:%s' ) ) AS title,
+        t1.SUSPENSION_STATE_ AS STATUS,
+        t1.NAME_ AS node_name,
+        t5.user_name AS start_user,
+        t3.user_name AS approval_user,
+        TIMESTAMPDIFF( SECOND, T1.CREATE_TIME_, CURRENT_TIME ) AS remain_time,
+        t1.CREATE_TIME_ AS create_time,
+        t4.START_TIME_ AS start_time,
+        t2.category_id,
+        t7.NAME AS category_name,
+        t7.ico AS category_ico,
+        t7.theme_color AS category_theme_color,
+        t1.ID_ AS task_id,
+        t1.ASSIGNEE_ AS assignee,
+        t4.BUSINESS_KEY_ AS business_id,
+        t6.NAME AS business_name,
+        t1.PROC_INST_ID_ AS instance_id,
+        t8.`status` AS distribute_status,
+        t8.assignee as distribute_assignee
+        FROM
+        act_ru_task t1
+        LEFT JOIN t_flow_definition t2 ON t1.PROC_DEF_ID_ = t2.flow_definition_id
+        LEFT JOIN t_user t3 ON t1.ASSIGNEE_ = t3.id
+        LEFT JOIN act_hi_procinst t4 ON t1.PROC_INST_ID_ = t4.PROC_INST_ID_
+        LEFT JOIN t_user t5 ON t4.START_USER_ID_ = t5.id
+        LEFT JOIN t_flow_business t6 ON t4.BUSINESS_KEY_ = t6.id
+        LEFT JOIN t_flow_definition_category t7 ON t2.category_id = t7.id
+        LEFT JOIN t_flow_distribute_task t8 ON t6.id = t8.business_id
+        ) t
+        where
+        (t.status=1
+        <if test="query.categoryId!=null">
+            and t.category_id=#{query.categoryId,jdbcType=VARCHAR}
+        </if>
+        <if test="query.title!=null">
+            and t.title like #{query.title,jdbcType=VARCHAR}
+        </if>
+        <if test="query.nodeName!=null">
+            and t.node_name like #{query.nodeName,jdbcType=VARCHAR}
+        </if>
+        <if test="query.userName!=null">
+            and t.approval_user like #{query.userName,jdbcType=VARCHAR}
+        </if>
+        <if test="query.startTime!=null&amp;&amp;query.endTime==null">
+            and t.create_time BETWEEN #{query.startTime,jdbcType=DATE} and CURRENT_TIME
+        </if>
+        <if test="query.startTime==null&amp;&amp;query.endTime!=null">
+            and t.create_time BETWEEN CURRENT_TIME and #{query.endTime,jdbcType=DATE}
+        </if>
+        <if test="query.startTime!=null&amp;&amp;query.endTime!=null">
+            and t.create_time BETWEEN #{query.startTime,jdbcType=DATE} and #{query.endTime,jdbcType=DATE}
+        </if>
+        <if test="query.userId!=null">
+            and t.assignee=#{query.userId,jdbcType=VARCHAR}
+        </if>
+        )
+        <if test="query.userId!=null">
+            or (t.distribute_status = 1 and t.distribute_assignee=#{query.userId,jdbcType=VARCHAR})
+        </if>
+    </select>
+</mapper>

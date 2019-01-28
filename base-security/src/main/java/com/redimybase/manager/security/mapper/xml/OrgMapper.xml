@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redimybase.manager.security.mapper.OrgMapper">
+
+
+    <select id="orgDtoTreeList" resultType="com.redimybase.manager.security.entity.OrgEntity">
+         SELECT DISTINCT
+	org.id AS id,
+	org.NAME,
+	org.parent_id,
+	org.create_time,
+	org.update_time,
+	org.status,
+	(select name from t_org where id=org.parent_id) as parent_name
+FROM
+	t_org org
+	where `status`=1 or `status`=2
+    </select>
+
+    <select id="orgUserDtoTreeList" resultType="com.redimybase.manager.security.entity.OrgEntity">
+         SELECT DISTINCT
+	org.id AS id,
+	org.NAME,
+	org.parent_id,
+	org.create_time,
+	org.update_time,
+	org.status,
+	(select name from t_org where id=org.parent_id) as parent_name
+FROM
+	t_org org
+	where `status`=1
+    </select>
+</mapper>

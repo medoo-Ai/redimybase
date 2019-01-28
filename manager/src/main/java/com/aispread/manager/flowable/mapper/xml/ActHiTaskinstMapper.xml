@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aispread.manager.flowable.mapper.ActHiTaskinstMapper">
+
+    <select id="taskList" resultType="com.aispread.manager.flowable.dto.FlowDoneTask">
+        select
+        t.title,t.status,t.node_name,t.start_user,t.node_create_time,t.category_id,t.assignee,t.business_id,
+        t.business_name,t.instance_id,t.category_ico,t.category_theme_color,t.category_name,t.task_id
+        from
+        (
+        SELECT
+        CONCAT( '[', t2.`name`, '] - ', t5.user_name, '发起于', DATE_FORMAT( t4.START_TIME_, '%Y-%m-%d %H:%i:%s' ) ) AS
+        title,
+        (
+        case when t4.END_TIME_ IS NOT NULL then 1
+        when t8.SUSPENSION_STATE_= 2 then 2
+        else 4 end
+        ) as status,
+        t8.NAME_ AS node_name,
+        t5.user_name AS start_user,
+        t1.START_TIME_ AS node_create_time,
+        t4.START_TIME_ as apply_start_time,
+        t1.END_TIME_ as approval_start_time,
+        t2.category_id as category_id,
+        t1.ASSIGNEE_ AS assignee,
+        t4.BUSINESS_KEY_ AS business_id,
+        t6.name as business_name,
+        t1.PROC_INST_ID_ as instance_id,
+        t7.name as category_name,
+        t7.ico as category_ico,
+        t7.theme_color as category_theme_color,
+        t1.ID_ as task_id
+        FROM
+        act_hi_taskinst t1
+        LEFT JOIN t_flow_definition t2 ON t1.PROC_DEF_ID_ = t2.flow_definition_id
+        LEFT JOIN t_user t3 ON t1.ASSIGNEE_ = t3.id
+        LEFT JOIN act_hi_procinst t4 ON t1.PROC_INST_ID_ = t4.PROC_INST_ID_
+        LEFT JOIN t_user t5 ON t4.START_USER_ID_ = t5.id
+        left join t_flow_business t6 on t4.BUSINESS_KEY_=t6.id
+        left join t_flow_definition_category t7 on t2.category_id=t7.id
+        left join act_ru_task t8 on t1.PROC_INST_ID_=t8.PROC_INST_ID_
+        WHERE
+        t1.END_TIME_ IS NOT NULL
+        ) t
+        WHERE 1=1
+        <if test="query.userId!=null">
+            AND t.assignee=#{query.userId,jdbcType=VARCHAR}
+        </if>
+        <if test="query.title!=null">
+            AND t.title like #{query.title,jdbcType=VARCHAR}
+        </if>
+        <if test="query.businessId!=null">
+            AND t.business_id=#{query.businessId,jdbcType=VARCHAR}
+        </if>
+        <if test="query.categoryId!=null">
+            AND t.category_id=#{query.categoryId,jdbcType=VARCHAR}
+        </if>
+
+        <if test="query.applyStartTime!=null&amp;&amp;query.applyEndTime==null">
+            AND t.apply_start_time BETWEEN #{query.applyStartTime,jdbcType=DATE} and CURRENT_TIME
+        </if>
+        <if test="query.applyStartTime==null&amp;&amp;query.applyEndTime!=null">
+            AND t.apply_start_time BETWEEN CURRENT_TIME and #{query.applyEndTime,jdbcType=DATE}
+        </if>
+        <if test="query.applyStartTime!=null&amp;&amp;query.applyEndTime!=null">
+            AND t.apply_start_time BETWEEN #{query.applyStartTime,jdbcType=DATE} and #{query.applyEndTime,jdbcType=DATE}
+        </if>
+
+        <if test="query.approvalStartTime!=null&amp;&amp;query.approvalEndTime==null">
+            AND t.approvalStartTime BETWEEN #{query.approvalEndTime,jdbcType=DATE} and CURRENT_TIME
+        </if>
+        <if test="query.approvalStartTime==null&amp;&amp;query.approvalEndTime!=null">
+            AND t.approvalStartTime BETWEEN CURRENT_TIME and #{query.approvalEndTime,jdbcType=DATE}
+        </if>
+        <if test="query.approvalStartTime!=null&amp;&amp;query.approvalEndTime!=null">
+            AND t.approvalStartTime BETWEEN #{query.applyStartTime,jdbcType=DATE} and
+            #{query.approvalEndTime,jdbcType=DATE}
+        </if>
+        <if test="query.status!=null">
+            and t.status=#{query.status,jdbcType=NUMERIC}
+        </if>
+
+    </select>
+    <select id="approvalRecord" resultType="com.aispread.manager.flowable.dto.FlowApprovalRecord">
+        SELECT
+	t1.START_TIME_ AS send_time,
+	t1.END_TIME_ AS complete_time,
+	t1.DURATION_ AS duration,
+	t2.user_name AS assignee,
+	t3.action AS action,
+	t3.`content` as comment,
+	t1.ID_ AS task_id,
+	t1.task_def_key_ AS task_code
+FROM
+	act_hi_taskinst t1
+	LEFT JOIN t_user t2 ON t1.ASSIGNEE_ = t2.id
+	right JOIN t_flow_opinion t3 ON t1.ID_ = t3.task_id
+WHERE
+	t1.END_TIME_ IS NOT NULL
+and PROC_INST_ID_=#{processInstanceId,jdbcType=VARCHAR}
+order by complete_time desc
+    </select>
+    <select id="applyTaskList" resultType="com.aispread.manager.flowable.dto.FlowApplyTask">
+        select t.task_id,
+        t.category_name,t.title,t.status,t.node_name,t.approval_user,t.start_user,t.create_time,t.business_name,
+        t.instance_id,t.category_ico,t.category_theme_color,t.business_id,t.category_id,t.start_user_id,
+        t.end_time
+        from
+        (
+        SELECT
+        DISTINCT count(t1.PROC_INST_ID_),
+        CONCAT( '[', t2.`name`, '] - ', t5.user_name, '发起于', DATE_FORMAT( t1.START_TIME_, '%Y-%m-%d %H:%i:%s' ) ) AS
+        title,
+        IFNULL( t4.END_TIME_, 0 ) AS STATUS,
+        (select NAME_ from act_ru_task where PROC_INST_ID_=t1.PROC_INST_ID_) AS node_name,
+        t5.user_name AS start_user,
+        t1.START_TIME_ as create_time,
+        t2.category_id as category_id,
+        t1.START_USER_ID_ as start_user_id,
+        t6.`name` as category_name,
+        t6.ico as category_ico,
+        t6.theme_color as category_theme_color,
+        t3.user_name as approval_user,
+        t7.name as business_name,
+        t7.id as business_id,
+        t1.PROC_INST_ID_ as instance_id,
+        t4.ID_ as task_id,
+        t4.END_TIME_ as end_time
+        FROM
+        act_hi_procinst t1
+        LEFT JOIN t_flow_definition t2 ON t1.PROC_DEF_ID_ = t2.flow_definition_id
+        LEFT JOIN t_user t3 ON t1.START_USER_ID_= t3.id
+        LEFT JOIN act_hi_taskinst t4 ON t1.PROC_INST_ID_=t4.PROC_INST_ID_
+        LEFT JOIN t_user t5 ON t1.START_USER_ID_ = t5.id
+        left join t_flow_definition_category t6 on t2.category_id=t6.id
+        left join t_flow_business t7 on t1.BUSINESS_KEY_=t7.id
+        GROUP BY t1.PROC_INST_ID_
+        ) t
+        WHERE 1=1
+
+        <if test="query.userId!=null">
+            and t.START_USER_ID=#{query.userId,jdbcType=VARCHAR}
+        </if>
+        <if test="query.title!=null">
+            AND t.title like #{query.title,jdbcType=VARCHAR}
+        </if>
+        <if test="query.status!=null&amp;&amp;query.status!=0">
+            AND t.`status`!=0
+        </if>
+        <if test="query.status==0">
+            AND t.`status`=0
+        </if>
+        <if test="query.categoryId!=null">
+            AND t.category_id=#{query.categoryId,jdbcType=VARCHAR}
+        </if>
+        <if test="query.startTime!=null&amp;&amp;query.endTime==null">
+            AND t.create_time BETWEEN #{query.startTime,jdbcType=DATE} and CURRENT_TIME
+        </if>
+        <if test="query.startTime==null&amp;&amp;query.endTime!=null">
+            AND t.create_time BETWEEN CURRENT_TIME and #{query.endTime,jdbcType=DATE}
+        </if>
+        <if test="query.startTime!=null&amp;&amp;query.endTime!=null">
+            AND t.create_time BETWEEN #{query.startTime,jdbcType=DATE} and #{query.endTime,jdbcType=DATE}
+        </if>
+    </select>
+</mapper>

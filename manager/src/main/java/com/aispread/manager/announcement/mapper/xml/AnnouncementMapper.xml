@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aispread.manager.announcement.mapper.AnnouncementMapper">
+
+  <select id="getDTOList" resultType="com.aispread.manager.announcement.entity.AnnouncementListDTO">
+    SELECT
+      t1.id,t1.title,t1.model,t1.content,t1.attachment_id as attachmentId, t1.release_user as releaseUser,t2.user_name as releaseUserName,
+      t1.release_time as releaseTime,t1.status,t1.create_time as createTime,t1.creator_id as creatorId,t3.user_name as creatorName,
+      t1.update_time as updateTime,t1.updater_id as updaterId,t4.user_name as updateName,t1.app_banner_id as appBannerId,t5.sort as imgSort
+    FROM
+      t_announcement t1
+      left join t_user t2 on t1.release_user = t2.id
+      left join t_user t3 on t1.creator_id = t3.id
+      left join t_user t4 on t1.updater_id = t4.id
+      left join t_app_banner t5 on t1.app_banner_id = t5.id
+    where
+      t1.status != 0
+    <if test="(query.title != null) and (query.title != '')">
+      <![CDATA[
+          and t1.title like CONCAT(CONCAT('%', #{query.title,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+
+    <if test="(query.model != null) and (query.model != '')">
+      <![CDATA[
+          and t1.model = #{query.model,jdbcType=INTEGER}
+      ]]>
+    </if>
+
+    <if test="(query.releaseUser != null) and (query.releaseUser != '')">
+      <![CDATA[
+          and t1.release_user = #{query.releaseUser,jdbcType=VARCHAR}
+      ]]>
+    </if>
+
+    <if test="(query.releaseUserName != null) and (query.releaseUserName != '')">
+      <![CDATA[
+          and t2.user_name like CONCAT(CONCAT('%', #{query.releaseUserName,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+
+    <if test="(query.releaseTimeStart != null) and (query.releaseTimeStart != '')">
+      <![CDATA[
+          and t1.release_time >= #{query.releaseTimeStart,jdbcType=VARCHAR}
+      ]]>
+    </if>
+
+    <if test="(query.releaseTimeEnd != null) and (query.releaseTimeEnd != '')">
+      <![CDATA[
+          and t1.release_time <= #{query.releaseTimeEnd,jdbcType=VARCHAR}
+      ]]>
+    </if>
+
+    <if test="(query.status != null) and (query.status != '')">
+      <![CDATA[
+          and t1.status = #{query.status,jdbcType=VARCHAR}
+      ]]>
+    </if>
+  </select>
+
+  <select id="getDTO" resultType="com.aispread.manager.announcement.entity.AnnouncementListDTO" parameterType="string">
+    SELECT
+    t1.id,t1.title,t1.model,t1.content,t1.attachment_id as attachmentId, t1.release_user as releaseUser,t2.user_name as releaseUserName,
+    t1.release_time as releaseTime,t1.status,t1.create_time as createTime,t1.creator_id as creatorId,t3.user_name as creatorName,
+    t1.update_time as updateTime,t1.updater_id as updaterId,t4.user_name as updateName,t1.app_banner_id as appBannerId,t5.sort as imgSort
+    FROM
+    t_announcement t1
+    left join t_user t2 on t1.release_user = t2.id
+    left join t_user t3 on t1.creator_id = t3.id
+    left join t_user t4 on t1.updater_id = t4.id
+    left join t_app_banner t5 on t1.app_banner_id = t5.id
+    where
+    t1.status != 0
+    and t1.id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <update id="switchToAnnouncement"  parameterType="string">
+    UPDATE
+    t_announcement t1
+    set
+      attachment_id = null,app_banner_id = null
+    where
+    t1.status != 0
+    and t1.id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="switchToImg"  parameterType="string">
+    UPDATE
+    t_announcement t1
+    set
+      content = null
+    where
+    t1.status != 0
+    and t1.id = #{id,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

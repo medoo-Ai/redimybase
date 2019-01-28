@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redimybase.manager.security.mapper.UserMapper">
+
+
+    <select id="getOrgFullName" parameterType="string" resultType="java.lang.String">
+        <![CDATA[
+        SELECT GROUP_CONCAT(org.name order by tmp.lvl desc separator '/')
+        FROM (
+                 SELECT
+                     @r AS _id,
+                     (SELECT @r := parent_id FROM t_org WHERE id = _id) AS parent_id,
+                     @l := @l + 1 AS lvl
+                 FROM
+                     (SELECT @r := #{orgId}, @l := 0) vars,
+                      t_org h
+                 WHERE @r <> 0) tmp
+                 JOIN t_org org
+                      ON tmp._id = org.id
+        ORDER BY tmp.lvl desc
+          ]]>
+    </select>
+
+    <select id="getAddressList" resultType="com.redimybase.manager.security.entity.dto.UserAddressListDTO">
+        SELECT
+        t1.id,t1.user_name,t1.phone, t1.email, t1.status,t1.telephone
+        ,t2.org_id as orgId
+        ,t3.name as orgName
+        ,t5.name as positionName
+        ,t1.avatar_url as avatar_url
+        ,t6.office as office
+        ,t6.station as station
+        FROM
+        t_user t1
+        right join t_user_org t2 on t1.id = t2.user_id
+        left join t_org t3 on t2.org_id = t3.id
+        left join t_user_position t4 on t1.id = t4.user_id
+        left join t_position t5 on t4.position_id = t5.id
+        left join t_user_ext t6 on t1.id=t6.user_id
+        where
+        (t1.status = 1 or t1.status = 2)
+        <if test="orgId!=null">
+            AND t2.org_id = #{orgId,jdbcType=VARCHAR}
+        </if>
+        <if test="orgName!=null">
+            AND t3.name LIKE #{orgName,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <select id="getUserByOrgId" resultType="com.redimybase.manager.security.entity.UserEntity">
+        SELECT
+        id,
+        user_name,
+        account,
+        phone,
+        email,
+        sex,
+        avatar_url,
+        PASSWORD,
+        creator_id,
+        creator,
+        reviser_id,
+        reviser,
+        STATUS,
+        create_time,
+        update_time,
+        id_no,
+        cast(substring(id_no,7,8) as date) as birthday,
+        ( SELECT NAME FROM t_org WHERE id = ( SELECT org_id FROM t_user_org WHERE user_id = t1.id ) ) AS org_name
+        FROM
+        t_user t1
+        WHERE
+        (t1.status=1 or t1.status=2)
+        and
+        (
+        t1.phone like #{phone}
+        or
+        t1.user_name like #{userName}
+        )
+        <if test="orgId!=null">
+            and id IN ( SELECT user_id FROM t_user_org WHERE org_id = #{orgId})
+        </if>
+    </select>
+    <select id="getUserIdByOrgId" resultType="java.lang.String">
+        select t1.id from t_user t1
+left join t_user_org t2 on t1.id=t2.user_id
+where `status`=#{status,jdbcType=VARCHAR}
+and t2.orgId in (#{orgId,jdbcType=VARCHAR})
+    </select>
+</mapper>

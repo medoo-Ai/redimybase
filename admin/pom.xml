@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.aispread</groupId>
+    <artifactId>admin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>admin</name>
+    <description>This is a admin interface service</description>
+
+    <parent>
+        <groupId>com.redimybase</groupId>
+        <artifactId>redimybase</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <kotlin.version>1.3.11</kotlin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.redimybase</groupId>
+            <artifactId>manager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.redimybase</groupId>
+            <artifactId>base-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.redimybase</groupId>
+            <artifactId>base-flowable</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.j-im</groupId>
+            <artifactId>jim-server</artifactId>
+            <version>2.5.0.v20181115-RELEASE</version>
+        </dependency>-->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <layout>ZIP</layout>
+                    <includes>
+                        <include>
+                            <groupId>com.redimybase</groupId>
+                            <artifactId>redimybase</artifactId>
+                        </include>
+                        <include>
+                            <groupId>com.aispread</groupId>
+                            <artifactId>admin</artifactId>
+                        </include>
+                        <include>
+                            <groupId>com.redimybase.common</groupId>
+                            <artifactId>base-common</artifactId>
+                        </include>
+                        <include>
+                            <artifactId>redimybase</artifactId>
+                            <groupId>com.redimybase</groupId>
+                        </include>
+                        <include>
+                            <groupId>com.redimybase</groupId>
+                            <artifactId>base-framework</artifactId>
+                        </include>
+                        <include>
+                            <groupId>com.redimybase</groupId>
+                            <artifactId>base-security</artifactId>
+                        </include>
+                        <include>
+                            <groupId>com.aispread</groupId>
+                            <artifactId>manager</artifactId>
+                        </include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jvmTarget>1.8</jvmTarget>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>testCompile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

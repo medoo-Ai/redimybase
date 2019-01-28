@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aispread.manager.document.mapper.DocumentMapper">
+
+    <select id="list" resultType="com.aispread.manager.document.entity.DocumentEntity">
+        select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,
+        ( SELECT GROUP_CONCAT(NAME) FROM t_document_label WHERE id IN ( SELECT label_id FROM t_document_label_union
+        WHERE document_id = t1.id ) ) AS label
+        from t_document
+        t1
+        left join t_document_folder t2 on t1.folder_id=t2.id
+        where 1=1
+
+        <if test="labelId!=null">
+            AND t1.id IN ( SELECT document_id from t_document_label_union WHERE label_id IN
+            (#{labelId,jdbcType=VARCHAR}) )
+        </if>
+        <if test="orgId!=null">
+            and t1.org_id=#{orgId,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null">
+            and t1.name like #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="creator!=null">
+            and t1.creator like #{creator,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime!=null&amp;&amp;endTime==null">
+            and t1.create_time BETWEEN #{startTime,jdbcType=VARCHAR} AND CURRENT_TIME
+        </if>
+        <if test="startTime==null&amp;&amp;endTime!=null">
+            and t1.create_time BETWEEN CURRENT_TIMEAND AND #{endTime,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime!=null&amp;&amp;endTime!=null">
+            and t1.create_time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+        </if>
+        and t1.view_range=1 and t1.creator_id=#{userId,jdbcType=VARCHAR}
+
+        <if test="orgId!=null">
+            union
+
+            select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,
+            ( SELECT GROUP_CONCAT(NAME) FROM t_document_label WHERE id IN ( SELECT label_id FROM t_document_label_union
+            WHERE document_id = t1.id ) ) AS label
+            from
+            t_document
+            t1
+            left join t_document_folder t2 on t1.folder_id=t2.id
+            where
+            (t1.view_range=2 or t1.view_range=3)
+            <if test="labelId!=null">
+                AND t1.id IN ( SELECT document_id from t_document_label_union WHERE label_id IN
+                (#{labelId,jdbcType=VARCHAR}) )
+            </if>
+            <if test="all==true&amp;&amp;userOrgId!=null">
+                and (t1.org_id in (select id from t_org where parent_id=#{userOrgId,jdbcType=VARCHAR}) or
+                t1.org_id=#{userOrgId,jdbcType=VARCHAR})
+            </if>
+            <if test="all==false&amp;&amp;orgId!=null">
+                and (t1.org_id in (select id from t_org where parent_id=#{orgId,jdbcType=VARCHAR}) or
+                t1.org_id=#{orgId,jdbcType=VARCHAR})
+            </if>
+            <if test="name!=null">
+                and t1.name like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="creator!=null">
+                and t1.creator like #{creator,jdbcType=VARCHAR}
+            </if>
+            <if test="startTime!=null&amp;&amp;endTime==null">
+                and t1.create_time BETWEEN #{startTime,jdbcType=VARCHAR} AND CURRENT_TIME
+            </if>
+            <if test="startTime==null&amp;&amp;endTime!=null">
+                and t1.create_time BETWEEN CURRENT_TIMEAND AND #{endTime,jdbcType=VARCHAR}
+            </if>
+            <if test="startTime!=null&amp;&amp;endTime!=null">
+                and t1.create_time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+            </if>
+        </if>
+    </select>
+
+    <select id="listByFolderId" resultType="com.aispread.manager.document.entity.DocumentEntity">
+        select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,
+        ( SELECT GROUP_CONCAT(NAME) FROM t_document_label WHERE id IN ( SELECT label_id FROM t_document_label_union
+        WHERE document_id = t1.id ) ) AS label
+        from t_document t1
+        left join t_document_folder t2 on t1.folder_id=t2.id
+        where 1=1
+        <if test="labelId!=null">
+            AND t1.id IN ( SELECT document_id from t_document_label_union WHERE label_id IN
+            (#{labelId,jdbcType=VARCHAR}) )
+        </if>
+        <if test="orgId!=null">
+            and t1.org_id=#{orgId,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null">
+            and t1.name like #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="creator!=null">
+            and t1.creator like #{creator,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime!=null&amp;&amp;endTime==null">
+            and t1.create_time BETWEEN #{startTime,jdbcType=VARCHAR} AND CURRENT_TIME
+        </if>
+        <if test="startTime==null&amp;&amp;endTime!=null">
+            and t1.create_time BETWEEN CURRENT_TIMEAND AND #{endTime,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime!=null&amp;&amp;endTime!=null">
+            and t1.create_time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+        </if>
+        and t1.view_range=1 and t1.creator_id=#{userId,jdbcType=VARCHAR}
+
+        union
+
+        select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,
+        ( SELECT GROUP_CONCAT(NAME) FROM t_document_label WHERE id IN ( SELECT label_id FROM t_document_label_union
+        WHERE document_id = t1.id ) ) AS label
+        from t_document
+        t1
+        left join t_document_folder t2 on t1.folder_id=t2.id
+        where
+        (t1.view_range=2 or t1.view_range=3)
+        <if test="labelId!=null">
+            AND t1.id IN ( SELECT document_id from t_document_label_union WHERE label_id IN
+            (#{labelId,jdbcType=VARCHAR}) )
+        </if>
+        <if test="all==true&amp;&amp;userOrgId!=null">
+            and (t1.org_id in (select id from t_org where parent_id=#{userOrgId,jdbcType=VARCHAR}) or
+            t1.org_id=#{userOrgId,jdbcType=VARCHAR})
+        </if>
+        <if test="all==false&amp;&amp;folderId!=null">
+            and t1.folder_id=#{folderId,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null">
+            and t1.name like #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="creator!=null">
+            and t1.creator like #{creator,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime!=null&amp;&amp;endTime==null">
+            and t1.create_time BETWEEN #{startTime,jdbcType=VARCHAR} AND CURRENT_TIME
+        </if>
+        <if test="startTime==null&amp;&amp;endTime!=null">
+            and t1.create_time BETWEEN CURRENT_TIMEAND AND #{endTime,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime!=null&amp;&amp;endTime!=null">
+            and t1.create_time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aispread.manager.notice.mapper.NoticeMapper">
+
+    <select id="getNoticeList" resultType="com.aispread.manager.notice.dto.NoticeDTO">
+        select
+            t1.id, t1.user_id userId, t2.user_name userName, t1.message_title messageTitle,
+            t1.read_flag readFlag, t1.create_user createUser, t3.user_name createUserName,
+            t1.create_time createTime
+        from t_notice t1
+        left join t_user t2 on t1.user_id = t2.id
+        left join t_user t3 on t1.create_user = t3.id
+        where 1=1
+        <if test="query.userId!=null">
+            and t1.user_id =#{query.userId,jdbcType=VARCHAR}
+        </if>
+        <if test="query.readFlag!=null">
+            and t1.read_flag =#{query.readFlag,jdbcType=INTEGER}
+        </if>
+        order by t1.read_flag asc, t1.create_time desc
+    </select>
+
+
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redimybase.manager.security.mapper.TaskMainMapper">
+
+  <select id="getDTOById" parameterType="java.lang.String" resultType="com.redimybase.manager.security.entity.dto.TaskMainDTO">
+    select
+      t1.*,
+      t2.user_name as creatorName,
+      t3.user_name as reviserName,
+      t4.user_name as initiatorName
+    from
+      t_task_main t1
+        left join t_user t2 on t1.creator_id = t2.id
+        left join t_user t3 on t1.reviser_id = t3.id
+        left join t_user t4 on t1.initiator = t4.id
+    where
+      1=1
+      and t1.status != 0
+      and t1.id = #{id,jdbcType=VARCHAR}
+
+  </select>
+
+  <select id="getTaskMainList" resultType="com.redimybase.manager.security.entity.dto.TaskMainDTO">
+    SELECT
+    t1.id,t1.title,t1.initiator,t2.user_name as initiatorName,t1.remark,t1.importance,t1.priority,t1.task_status as taskStatus,t1.release_time as releaseTime,t1.creator_id as creatorId,t3.user_name as creatorName,t1.reviser_id as reviserId,t4.user_name as reviserName,t1.create_time,t1.update_time,t1.last_date as lastDate
+    FROM
+    t_task_main t1
+    left join t_user t2 on t1.initiator = t2.id
+    left join t_user t3 on t1.creator_id = t3.id
+    left join t_user t4 on t1.reviser_id = t4.id
+    where
+    t1.status != 0
+    <if test="(query.initiator != null) and (query.initiator != '')">
+      <![CDATA[
+          and t1.initiator = #{query.initiator,jdbcType=VARCHAR}
+      ]]>
+    </if>
+
+    <if test="(query.importance != null) and (query.importance != '')">
+      <![CDATA[
+          and t1.importance = #{query.importance,jdbcType=VARCHAR}
+      ]]>
+    </if>
+
+    <if test="(query.priority != null) and (query.priority != '')">
+      <![CDATA[
+          and t1.priority = #{query.priority,jdbcType=VARCHAR}
+      ]]>
+    </if>
+
+    <if test="(query.taskStatus != null) and (query.taskStatus != '')">
+      <![CDATA[
+          and t1.task_status = #{query.taskStatus,jdbcType=VARCHAR}
+      ]]>
+    </if>
+
+    <if test="(query.initiatorName != null) and (query.initiatorName != '')">
+      <![CDATA[
+          and t2.user_name like CONCAT(CONCAT('%', #{query.initiatorName,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+
+    <if test="(query.title != null) and (query.title != '')">
+      <![CDATA[
+          and t1.title like CONCAT(CONCAT('%', #{query.title,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+
+    <if test="(query.remark != null) and (query.remark != '')">
+      <![CDATA[
+          and t1.remark like CONCAT(CONCAT('%', #{query.remark,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+
+    <if test="(query.releaseTime  != null) and (query.releaseTime != '')">
+      <![CDATA[
+          and DATE_FORMAT(t1.release_time,'%Y-%m-%d') = left(#{query.releaseTime,jdbcType=VARCHAR},10)
+      ]]>
+    </if>
+
+    <if test="(query.lastDate  != null) and (query.lastDate != '')">
+      <![CDATA[
+          and DATE_FORMAT(t1.lastDate,'%Y-%m-%d') = left(#{query.releaseTime,jdbcType=VARCHAR},10)
+      ]]>
+    </if>
+  </select>
+
+</mapper>

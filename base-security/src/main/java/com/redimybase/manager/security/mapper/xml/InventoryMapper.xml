@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.redimybase.manager.security.mapper.InventoryMapper">
+  <update id="updateInventory" parameterType="com.redimybase.manager.security.entity.dto.InventoryUpdateDTO">
+    <![CDATA[
+        update t_inventory set qty = qty + (#{offsetValue,jdbcType=DECIMAL})
+        where device = #{deviceId,jdbcType=VARCHAR}
+    ]]>
+  </update>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redimybase.manager.security.mapper.TaskSubMapper">
+
+  <select id = "getList" parameterType="com.redimybase.manager.security.entity.dto.TaskSubDTO" resultType="com.redimybase.manager.security.entity.dto.TaskSubDTO">
+    select
+      t1.*,
+      t2.user_name as creatorName,
+      t3.user_name as reviserName,
+      t4.user_name as executiveName
+    from
+      t_task_sub t1
+        left join t_user t2 on t1.creator_id = t2.id
+        left join t_user t3 on t1.reviser_id = t3.id
+        left join t_user t4 on t1.executiveId = t4.id
+    where
+        t1.status != 0
+    <if test="(parent != null) and (parent != '')">
+      <![CDATA[
+          and t1.parent = #{parent,jdbcType=VARCHAR}
+      ]]>
+    </if>
+
+    <if test="(title != null) and (title != '')">
+      <![CDATA[
+          and t1.title like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+
+    <if test="(executiveId != null) and (executiveId != '')">
+      <![CDATA[
+          and t1.executiveId = #{name,jdbcType=VARCHAR}
+      ]]>
+    </if>
+
+  </select>
+
+  <select id = "getDto" parameterType="java.lang.String" resultType="com.redimybase.manager.security.entity.dto.TaskSubDTO">
+    select
+    t1.*,
+    t2.user_name as creatorName,
+    t3.user_name as reviserName,
+    t4.user_name as executiveName
+    from
+    t_task_sub t1
+    left join t_user t2 on t1.creator_id = t2.id
+    left join t_user t3 on t1.reviser_id = t3.id
+    left join t_user t4 on t1.executiveId = t4.id
+    where
+    t1.status != 0
+    and t1.id = #{id,jdbcType=VARCHAR}
+  </select>
+</mapper>
