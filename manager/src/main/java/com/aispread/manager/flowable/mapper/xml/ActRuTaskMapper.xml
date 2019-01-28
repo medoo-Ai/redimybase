@@ -27,7 +27,7 @@
         FROM
         (
         SELECT
-        CONCAT( '[', t2.`name`, '] - ', t5.user_name, '发起于', DATE_FORMAT( t4.START_TIME_, '%Y-%m-%d %H:%i:%s' ) ) AS title,
+        t2.`name` AS title,
         t1.SUSPENSION_STATE_ AS STATUS,
         t1.NAME_ AS node_name,
         t5.user_name AS start_user,

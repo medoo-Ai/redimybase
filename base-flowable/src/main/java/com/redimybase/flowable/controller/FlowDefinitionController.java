@@ -105,7 +105,7 @@ public class FlowDefinitionController extends TableController<String, FlowDefini
             }
 
             if (entity.getCompleteFirstTask() == null) {
-                entity.setCompleteFirstTask(false);
+                entity.setCompleteFirstTask(true);
             }
             entity.setId(IdWorker.getIdStr());
             entity.setModelId(representation.getId());

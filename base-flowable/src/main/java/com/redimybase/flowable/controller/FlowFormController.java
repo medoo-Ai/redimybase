@@ -1,12 +1,17 @@
 package com.redimybase.flowable.controller;
 
+import com.aispread.manager.flowable.entity.FlowDefinitionEntity;
+import com.aispread.manager.flowable.entity.FlowNodeEntity;
+import com.aispread.manager.flowable.service.FlowDefinitionService;
 import com.aispread.manager.flowable.service.FlowFormContentService;
+import com.aispread.manager.flowable.service.FlowNodeService;
 import com.aispread.manager.form.entity.FormEntity;
 import com.aispread.manager.form.service.FormService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.redimybase.framework.bean.R;
+import com.redimybase.framework.exception.BusinessException;
 import com.redimybase.framework.model.datamodel.table.TableModel;
 import com.redimybase.framework.web.TableController;
 import com.aispread.manager.flowable.entity.FlowFormEntity;
@@ -51,23 +56,23 @@ public class FlowFormController extends TableController<String, FlowFormEntity, 
 
     @Override
     public R<?> save(FlowFormEntity entity) {
+        FlowNodeEntity flowNodeEntity = flowNodeService.getOne(new QueryWrapper<FlowNodeEntity>().eq("id", entity.getNodeId()).select("id,definition_id"));
+
+        FlowDefinitionEntity flowDefinitionEntity = flowDefinitionService.getOne(new QueryWrapper<FlowDefinitionEntity>().eq("id", flowNodeEntity.getDefinitionId()).select("id,status"));
+
+        if (FlowDefinitionEntity.Status.已发布.equals(flowDefinitionEntity.getStatus())) {
+            throw new BusinessException(R.失败, "请将流程作废再进行配置");
+        }
         service.remove(new QueryWrapper<FlowFormEntity>().eq("node_id", entity.getNodeId()));
         super.save(entity);
-        /*if (service.count(new QueryWrapper<FlowFormEntity>().eq("node_id", entity.getNodeId())) > 0) {
-            return R.fail("节点已存在表单,请删除该配置再继续");
-        }
-        //如果有多个formKey则分开新增
-        if (entity.getFormKey().contains(",")) {
-            String[] keys = StringUtils.split(entity.getFormKey(), ",");
-            for (String key : keys) {
-                entity.setId(null);
-                entity.setFormKey(key);
-                super.save(entity);
-            }
-            return R.ok();
-        }*/
         return super.save(entity);
     }
+
+    @Autowired
+    private FlowNodeService flowNodeService;
+
+    @Autowired
+    private FlowDefinitionService flowDefinitionService;
 
     @Autowired
     private FlowFormServiceImpl service;
