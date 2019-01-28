@@ -131,15 +131,20 @@ public class ShiroConfig {
         filterMap.put("/security/login", "anon");
         filterMap.put("/**", "authc");
         //swagger接口权限 开放
+//        filterMap.put("/swagger-ui.html", "anon");
+//        filterMap.put("/webjars/**", "anon");
+//        filterMap.put("/v2/**", "anon");
+//        filterMap.put("/swagger-resources/**", "anon");
+        shiroFilter.setFilterChainDefinitionMap(filterMap);
+        Map<String, Filter> map = new LinkedHashMap<>();
+        map.put("authc", new ShiroFormFilter());
+        shiroFilter.setFilters(map);
+        //swagger接口权限 开放
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/v2/**", "anon");
         filterMap.put("/swagger-resources/**", "anon");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
-        Map<String, Filter> map = new LinkedHashMap<>();
-        map.put("authc", new ShiroFormFilter());
-        shiroFilter.setFilters(map);
-
         return shiroFilter;
     }
 
