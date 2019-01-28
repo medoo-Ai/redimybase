@@ -1,3 +1,4 @@
+/*
 package com.aispread.manager.leave.utils;
 
 
@@ -7,10 +8,12 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import java.util.Iterator;
 
+*/
 /**
  * @auther SyntacticSugar
  * @data 2019/1/27 0027下午 5:27
- */
+ *//*
+
 public class JsonUtils {
     public static JSONObject mergeJson(Object object1, Object object2){
         if (object1 == null &&object2 == null){
@@ -48,3 +51,4 @@ public class JsonUtils {
     }
 
 }
+*/

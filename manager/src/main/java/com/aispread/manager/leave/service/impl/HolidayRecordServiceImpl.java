@@ -8,17 +8,9 @@ import com.aispread.manager.leave.mapper.HolidayRecordMapper;
 import com.aispread.manager.leave.mapper.StatutoryHolidayMapper;
 import com.aispread.manager.leave.service.CustomHolidayService;
 import com.aispread.manager.leave.service.HolidayRecordService;
-import com.aispread.manager.leave.utils.JsonUtils;
-import com.aispread.manager.leave.utils.LeaveUtils;
 import com.aispread.manager.leave.utils.WorkDayUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.redimybase.common.util.DateUtil;
-import com.redimybase.common.util.StrKit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
