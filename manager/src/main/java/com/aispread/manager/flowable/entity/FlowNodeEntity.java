@@ -98,10 +98,14 @@ public class FlowNodeEntity extends IdEntity<String> {
         public static final String INCLUSIVE_GATEWAY = "inclusiveGateway";
         public static final String PARALLEL_GATEWAY = "parallelGateway";
         public static final String SUBPROCESS = "subProcess";
-        //排他网关
+        /**
+         *排他网关
+         */
         public static final String EXCLUSIVE_GATEWAY = "exclusiveGateway";
 
-        //流程线
+        /**
+         * 流程线
+         */
         public static final String SEQUENCE_FLOW = "sequenceFlow";
     }
 }
