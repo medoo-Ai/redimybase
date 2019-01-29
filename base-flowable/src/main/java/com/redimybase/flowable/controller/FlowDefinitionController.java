@@ -5,9 +5,15 @@ import com.aispread.manager.dict.service.DictService;
 import com.aispread.manager.flowable.dto.FlowDefinitionListPage;
 import com.aispread.manager.flowable.entity.*;
 import com.aispread.manager.flowable.service.*;
+import com.aispread.manager.form.dto.FormField;
+import com.aispread.manager.form.entity.FormEntity;
+import com.aispread.manager.form.entity.FormFieldEntity;
+import com.aispread.manager.form.service.FormFieldService;
+import com.aispread.manager.form.service.FormService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.redimybase.common.util.SequenceUtils;
+import com.redimybase.flowable.cmd.GetFirstNodeCmd;
 import com.redimybase.flowable.cmd.SyncFlowCmd;
 import com.redimybase.flowable.service.ProcessHandleService;
 import com.redimybase.framework.bean.R;
@@ -24,6 +30,7 @@ import org.flowable.app.model.editor.ModelRepresentation;
 import org.flowable.app.rest.editor.ModelResource;
 import org.flowable.app.rest.editor.ModelsResource;
 import org.flowable.app.security.SecurityUtils;
+import org.flowable.bpmn.model.FlowElement;
 import org.flowable.engine.ManagementService;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.repository.ProcessDefinition;
@@ -45,6 +52,22 @@ import java.util.Objects;
 @Api(value = "流程模板Controller", tags = {"流程模板接口"})
 public class FlowDefinitionController extends TableController<String, FlowDefinitionEntity, FlowDefinitionMapper, FlowDefinitionServiceImpl> {
 
+    @PostMapping("getStartFieldByDefinitionId")
+    @ApiOperation(value = "根据流程模板ID获取启动表单字段")
+    public R<?> getStartFieldByDefinitionId(String definitionId) {
+        FlowDefinitionEntity flowDefinitionEntity = service.getOne(new QueryWrapper<FlowDefinitionEntity>().eq("id", definitionId).select("id,flow_definition_id"));
+
+        FlowElement flowElement = managementService.executeCommand(new GetFirstNodeCmd(flowDefinitionEntity.getFlowDefinitionId(), true));
+        FlowNodeEntity firstNode = flowNodeService.getOne(new QueryWrapper<FlowNodeEntity>().eq("definition_id", flowDefinitionEntity.getId()).eq("task_code", flowElement.getId()).select("id"));
+        FlowFormEntity startFormEntity = flowFormService.getOne(new QueryWrapper<FlowFormEntity>().eq("node_id", firstNode.getId()).select("id,form_key"));
+
+        if (startFormEntity == null) {
+            return R.fail("请先配置申请人启动表单再尝试配置变量");
+        }
+        FormEntity formEntity = formService.getOne(new QueryWrapper<FormEntity>().eq("form_key", startFormEntity.getFormKey()));
+
+        return new R<>(formFieldService.list(new QueryWrapper<FormFieldEntity>().eq("form_id", formEntity.getId())));
+    }
 
     @ApiOperation(value = "获取流程模板列表")
     @PostMapping("list")
@@ -134,9 +157,8 @@ public class FlowDefinitionController extends TableController<String, FlowDefini
             service.updateById(entity);
         }
 
-        return R.ok();
+        return new R<>(entity);
     }
-
     /**
      * 一键部署
      */
@@ -181,7 +203,7 @@ public class FlowDefinitionController extends TableController<String, FlowDefini
         }
 
         if (flowDefinitionEntity.isInternal()) {
-            throw new BusinessException(201, "内置流程模板不能删除");
+            throw new BusinessException(201, "该流程已与业务绑定,不能删除");
         }
 
         List<FlowNodeEntity> nodeEntities = flowNodeService.list(new QueryWrapper<FlowNodeEntity>().eq("definition_id", id).select("id"));
@@ -231,6 +253,12 @@ public class FlowDefinitionController extends TableController<String, FlowDefini
         service.updateById(flowDefinitionEntity);
         return R.ok();
     }
+
+    @Autowired
+    private FormService formService;
+
+    @Autowired
+    private FormFieldService formFieldService;
 
     @Autowired
     private FlowDefinitionOrgService flowDefinitionOrgService;

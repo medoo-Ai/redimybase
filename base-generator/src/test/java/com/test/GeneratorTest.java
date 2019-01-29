@@ -19,7 +19,7 @@ public class GeneratorTest {
         String packageName = "com.aispread.manager.flowable";      //包路径
         boolean serviceNameStartWithI = false;//user -> UserService, 设置成true: user -> IUserService
         generateByTables(false, "t_", packageName,
-                "t_flow_definition_org");
+                "act_re_procdef");
     }
 
     private void generateByTables(boolean serviceNameStartWithI, String tablePrefix, String packageName, String... tableNames) {

@@ -30,7 +30,7 @@ public class OriginFilter implements Filter {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE,PUT");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Content-type,x-requested-with,accept,cache-control,expires,pragma");
+        response.setHeader("Access-Control-Allow-Headers", "Content-type,x-requested-with,accept,cache-control,expires,pragma,Authorization");
         response.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
         chain.doFilter(req, res);
     }

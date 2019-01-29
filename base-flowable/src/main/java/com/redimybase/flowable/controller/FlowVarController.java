@@ -7,6 +7,7 @@ import com.aispread.manager.flowable.service.FlowDefinitionService;
 import com.aispread.manager.flowable.service.FlowNodeService;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.redimybase.common.util.SequenceUtils;
 import com.redimybase.framework.bean.R;
 import com.redimybase.framework.exception.BusinessException;
 import com.redimybase.framework.web.TableController;
@@ -64,6 +65,9 @@ public class FlowVarController extends TableController<String, FlowVarEntity, Fl
     public void beforeSave(FlowVarEntity entity) {
         FlowNodeEntity flowNodeEntity;
         if (StringUtils.isBlank(entity.getId())) {
+            entity.setType("String");
+            entity.setRequired(1);
+            entity.setVarKey(SequenceUtils.getSequenceInStr("VAR"));
             flowNodeEntity = flowNodeService.getOne(new QueryWrapper<FlowNodeEntity>().eq("id", entity.getNodeId()).select("id,definition_id"));
 
         } else {

@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import java.io.Serializable;
 
 /**
+ * 权限session管理器
  * Created by Irany 2018/7/14 13:24
  */
 @Component

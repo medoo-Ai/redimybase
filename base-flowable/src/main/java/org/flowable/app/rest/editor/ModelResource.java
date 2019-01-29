@@ -240,6 +240,7 @@ public class ModelResource {
         ActReProcdefEntity actReProcdefEntity = actReProcdefService.getOne(new QueryWrapper<ActReProcdefEntity>().eq("DEPLOYMENT_ID_", deploy.getId()).select("ID_,VERSION_,KEY_"));
         FlowDefinitionEntity flowDefinitionEntity = JSONObject.parseObject(values.get("definitionEntity").get(0), FlowDefinitionEntity.class);
 
+        flowDefinitionEntity.setName(values.get("name").get(0));
         flowDefinitionEntity.setDefinitionKey(actReProcdefEntity.getKey());
         flowDefinitionEntity.setFlowDefinitionKey(actReProcdefEntity.getKey());
         flowDefinitionEntity.setFlowDefinitionVersion(String.valueOf(actReProcdefEntity.getVersion()));
