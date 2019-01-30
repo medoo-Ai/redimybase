@@ -2,6 +2,7 @@ package com.aispread.flowable.config;
 
 import com.aispread.admin.controller.document.listener.FlowDocumentListener;
 import com.redimybase.flowable.listener.business.FlowBusinessListener;
+import com.aispread.admin.controller.leave.listener.FlowLeaveListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,6 +24,8 @@ public class FlowBusinessListenerConfig {
 
         //(案例)文档业务流程监听器
         businessListeners.add(new FlowDocumentListener());
+        //请假流程监听器
+        businessListeners.add(new FlowLeaveListener());
         return businessListeners;
     }
 }

@@ -29,7 +29,6 @@ public class Notice extends IdEntity<String> {
     @TableId(value = "id",type = IdType.ID_WORKER_STR)
     private String id;
 
-
     /**
      * 用户ID
      */
