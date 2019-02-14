@@ -29,7 +29,7 @@ public class MeetingNoticeEntity extends IdEntity<String> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.ID_WORKER_STR)
+    @TableId(value = "id")
     private String id;
 
     /**

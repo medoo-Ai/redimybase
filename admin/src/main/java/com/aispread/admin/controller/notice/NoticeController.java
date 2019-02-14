@@ -69,7 +69,6 @@ public class NoticeController {
         page.setCurrent(notice.getPage());
         page.setSize(notice.getPageSize());
         return new R(service.getNoticeList(page, notice));
-        //return null;
     }
 
     /**

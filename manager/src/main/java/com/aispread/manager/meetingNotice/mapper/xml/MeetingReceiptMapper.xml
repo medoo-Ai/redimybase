@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aispread.manager.meetingNotice.mapper.MeetingReceiptMapper">
+
+    <select id="getMeetingReceiptList" resultType="com.aispread.manager.meetingNotice.dto.MeetingNoticrReceiptDTO">
+        select
+        t1.id ReceiptId, t1.notice_id noticeId, t1.attend_user_id attendUserId,
+        t2.user_name attendUserName, t1.receipt_time receiptTime, t1.receipt_type receiptType,
+        t1.receipt_reason receiptReason
+        from t_meeting_receipt t1
+        left join t_user t2 on t1.attend_user_id = t2.id
+    </select>
+</mapper>

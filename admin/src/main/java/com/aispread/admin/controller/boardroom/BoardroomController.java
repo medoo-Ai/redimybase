@@ -86,8 +86,8 @@ public class BoardroomController extends TableController<String, BoardroomEntity
     public R<?> delete(String id) {
         BoardroomEntity entity = new BoardroomEntity();
         entity.setId(id);
-//        entity.setStatus(BoardroomEntity.Status.删除);
-        if(service.removeById(entity)){
+        entity.setStatus(BoardroomEntity.Status.删除);
+        if(service.updateById(entity)){
             return R.ok();
         } else {
             return R.fail();
