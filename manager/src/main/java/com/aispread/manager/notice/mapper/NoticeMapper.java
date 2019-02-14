@@ -15,5 +15,5 @@ import org.apache.ibatis.annotations.Param;
  * @since 2019-01-13
  */
 public interface NoticeMapper extends BaseMapper<Notice> {
-    Page getNoticeList(Page<NoticeDTO> page,@Param("query") NoticeDTO query);
+    Page getNoticeList(Page<NoticeDTO> page, @Param("query") NoticeDTO query);
 }

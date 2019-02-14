@@ -34,7 +34,7 @@ import java.util.List;
 @Api(tags = "通知接口")
 public class NoticeController {
 
-    //    @Autowired
+//    @Autowired
 //    private JavaMailSender mailSender;
     private final static Logger log = LoggerFactory.getLogger(NoticeController.class);
     @Autowired
@@ -62,7 +62,6 @@ public class NoticeController {
 
     /**
      * 消息列表
-     *
      * @param notice 消息对象
      *               接受userID 和 readFlag
      * @return
@@ -79,36 +78,34 @@ public class NoticeController {
 
     /**
      * 消息详情
-     *
      * @param ID 消息ID
      * @return
      */
     @PostMapping("getNoticeByID")
     @ApiOperation("获取单个消息详情")
-    public R<?> getNoticeByID(String ID) {
+    public R<?> getNoticeByID(String ID){
         Notice notice = service.getById(ID);
         //消息状态改为已读
         Notice tempNotice = new Notice();
         tempNotice.setId(ID);
         tempNotice.setReadFlag(1);
         boolean readFlag = service.updateById(tempNotice);
-        if (readFlag) {
+        if(readFlag){
             return new R(notice);
-        } else {
+        } else{
             return R.fail();
         }
     }
 
     /**
      * 新增消息
-     *
      * @param notice 消息对象
      * @return
      */
     @PostMapping("addNotice")
     @ApiOperation("新建消息")
-    public R<?> addNotice(Notice notice) {
-        if (service.save(notice)) {
+    public R<?> addNotice(Notice notice){
+        if(service.save(notice)){
             return R.ok();
         } else {
             return R.fail();
@@ -117,14 +114,13 @@ public class NoticeController {
 
     /**
      * 删除消息
-     *
      * @param ID 消息ID
      * @return
      */
     @PostMapping("delNotice")
     @ApiOperation("删除消息")
-    public R<?> delNotice(String ID) {
-        if (service.removeById(ID)) {
+    public R<?> delNotice(String ID){
+        if(service.removeById(ID)){
             return R.ok();
         } else {
             return R.fail();
@@ -133,21 +129,20 @@ public class NoticeController {
 
     /**
      * 检查某个用户是否有未读消息
-     *
      * @param userID 用户ID
      * @return 返回true：有未读消息，返回false：没有未读消息
      */
     @PostMapping("isHaveNotReadByUserID")
     @ApiOperation("检查某个用户是否有未读消息")
-    public R<?> isHaveNotReadByUserID(String userID) {
+    public R<?> isHaveNotReadByUserID(String userID){
         QueryWrapper<Notice> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("user_id", userID);
+        queryWrapper.eq("user_id",userID);
         queryWrapper.eq("read_flag", 0);
         int num = service.count(queryWrapper);
-        if (num == 0) {
-            return new R<>(false);
+        if(num == 0){
+          return new R<>(false);
         } else {
-            return new R<>(true);
+          return new R<>(true);
         }
     }
 

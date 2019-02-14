@@ -5,8 +5,6 @@ import com.aispread.manager.notice.entity.Notice;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
-import java.util.List;
-
 /**
  * <p>
  *  服务类
