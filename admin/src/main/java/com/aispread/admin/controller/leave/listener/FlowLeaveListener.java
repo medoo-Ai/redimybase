@@ -17,6 +17,8 @@ public class FlowLeaveListener extends AbstractFlowBusinessListener {
     public void onPass(CustomFlow customFlow) {
         if (customFlow.getTaskType().equals("事假")) {
         //todo  业务逻辑
+            // 请假时间大于3天
+
             //流程状态 流程变量
             Integer flowStatus = customFlow.getFlowStatus();
             Map<String, Object> variables = customFlow.getVariables();
