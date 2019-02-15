@@ -14,8 +14,19 @@ package org.flowable.app.rest.editor;
 
 import java.io.InputStream;
 import java.text.ParseException;
-import com.alibaba.fastjson.annotation.JSONField;import java.util.Date;
 
+import com.aispread.manager.flowable.entity.ActReProcdefEntity;
+import com.aispread.manager.flowable.entity.FlowDefinitionEntity;
+import com.aispread.manager.flowable.service.ActReProcdefService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+
+import java.util.Date;
+import java.util.List;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.redimybase.flowable.controller.FlowDefinitionController;
 import com.redimybase.framework.bean.R;
 import com.redimybase.security.utils.SecurityUtil;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +46,7 @@ import org.flowable.bpmn.converter.BpmnXMLConverter;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.editor.language.json.converter.BpmnJsonConverter;
 import org.flowable.engine.RepositoryService;
+import org.flowable.engine.repository.Deployment;
 import org.flowable.idm.api.User;
 import org.flowable.idm.engine.impl.persistence.entity.UserEntityImpl;
 import org.slf4j.Logger;
@@ -79,6 +91,12 @@ public class ModelResource {
 
     @Autowired
     private ModelsResource modelsResource;
+
+    @Autowired
+    private FlowDefinitionController flowDefinitionController;
+
+    @Autowired
+    private ActReProcdefService actReProcdefService;
 
     protected BpmnJsonConverter bpmnJsonConverter = new BpmnJsonConverter();
 
@@ -208,12 +226,26 @@ public class ModelResource {
                           @RequestBody MultiValueMap<String, String> values) {
 
         saveModel(modelId, values);
+        Deployment deploy = null;
         if (deployment == 1) {
             Model model = modelService.getModel(modelId);
-            repositoryService.createDeployment().addBpmnModel(
+             deploy = repositoryService.createDeployment().addBpmnModel(
                     model.getKey() + ".bpmn",
                     modelService.getBpmnModel(model)).deploy();
         }
+        if (deploy == null) {
+            return R.fail("未知错误");
+        }
+
+        ActReProcdefEntity actReProcdefEntity = actReProcdefService.getOne(new QueryWrapper<ActReProcdefEntity>().eq("DEPLOYMENT_ID_", deploy.getId()).select("ID_,VERSION_,KEY_"));
+        FlowDefinitionEntity flowDefinitionEntity = JSONObject.parseObject(values.get("definitionEntity").get(0), FlowDefinitionEntity.class);
+
+        flowDefinitionEntity.setName(values.get("name").get(0));
+        flowDefinitionEntity.setDefinitionKey(actReProcdefEntity.getKey());
+        flowDefinitionEntity.setFlowDefinitionKey(actReProcdefEntity.getKey());
+        flowDefinitionEntity.setFlowDefinitionVersion(String.valueOf(actReProcdefEntity.getVersion()));
+        flowDefinitionEntity.setFlowDefinitionId(actReProcdefEntity.getId());
+        flowDefinitionController.save(flowDefinitionEntity);
         return R.ok();
     }
 

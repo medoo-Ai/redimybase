@@ -9,8 +9,7 @@
         from
         (
         SELECT
-        CONCAT( '[', t2.`name`, '] - ', t5.user_name, '发起于', DATE_FORMAT( t4.START_TIME_, '%Y-%m-%d %H:%i:%s' ) ) AS
-        title,
+        t2.`name` AS title,
         (
         case when t4.END_TIME_ IS NOT NULL then 1
         when t8.SUSPENSION_STATE_= 2 then 2
@@ -109,8 +108,7 @@ order by complete_time desc
         (
         SELECT
         DISTINCT count(t1.PROC_INST_ID_),
-        CONCAT( '[', t2.`name`, '] - ', t5.user_name, '发起于', DATE_FORMAT( t1.START_TIME_, '%Y-%m-%d %H:%i:%s' ) ) AS
-        title,
+        t2.`name` AS title,
         IFNULL( t4.END_TIME_, 0 ) AS STATUS,
         (select NAME_ from act_ru_task where PROC_INST_ID_=t1.PROC_INST_ID_) AS node_name,
         t5.user_name AS start_user,

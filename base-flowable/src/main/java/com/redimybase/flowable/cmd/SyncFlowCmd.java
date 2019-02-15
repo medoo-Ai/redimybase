@@ -249,7 +249,7 @@ public class SyncFlowCmd implements Command<Void> {
      * 配置流程节点按钮
      */
     public void configButton(String nodeId) {
-        Integer[] typeArray = {FlowButtonEntity.Type.同意, FlowButtonEntity.Type.分发};
+        Integer[] typeArray = {FlowButtonEntity.Type.同意, FlowButtonEntity.Type.分发,FlowButtonEntity.Type.驳回};
 
         for (int i = 0; i < typeArray.length; i++) {
             FlowButtonEntity buttonEntity = new FlowButtonEntity();

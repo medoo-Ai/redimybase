@@ -2,6 +2,8 @@ package com.aispread.admin.controller.document.listener;
 
 import com.redimybase.flowable.bean.CustomFlow;
 import com.redimybase.flowable.listener.business.AbstractFlowBusinessListener;
+import com.redimybase.flowable.listener.task.contants.FlowVariableConstants;
+
 import java.util.Map;
 
 /**

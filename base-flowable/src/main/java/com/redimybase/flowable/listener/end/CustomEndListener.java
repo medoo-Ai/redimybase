@@ -29,7 +29,6 @@ import java.util.Map;
 @Slf4j
 public class CustomEndListener implements ExecutionListener {
 
-
     @Override
     public void notify(DelegateExecution execution) {
         if ("end".equals(execution.getEventName())) {

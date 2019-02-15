@@ -104,4 +104,10 @@ public class AnnouncementListDTO {
   @ApiModelProperty(value = "轮播图片排序")
   private Integer imgSort;
 
+  /**
+   * app轮播ID
+   */
+  @ApiModelProperty(value = "app轮播ID")
+  private String appBannerId;
+
 }

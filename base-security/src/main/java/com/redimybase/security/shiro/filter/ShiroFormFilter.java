@@ -80,7 +80,7 @@ public class ShiroFormFilter extends FormAuthenticationFilter {
         httpResp.setHeader("Access-Control-Allow-Credentials", "true");
         httpResp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE,PUT");
         httpResp.setHeader("Access-Control-Max-Age", "3600");
-        httpResp.setHeader("Access-Control-Allow-Headers", "Content-type,x-requested-with,accept,cache-control,expires,pragma");
+        httpResp.setHeader("Access-Control-Allow-Headers", "Content-type,x-requested-with,accept,cache-control,expires,pragma,Authorization,Cookie");
         httpResp.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
 
         Subject subject = getSubject(request, response);

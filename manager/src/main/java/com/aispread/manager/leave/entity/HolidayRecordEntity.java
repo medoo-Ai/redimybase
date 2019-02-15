@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.redimybase.framework.mybatis.id.IdEntity;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * 法定节假日
  * @auther SyntacticSugar
@@ -24,10 +26,36 @@ public @Data class HolidayRecordEntity extends IdEntity<String> {
     //remark
     @TableField("remark")
     private String remark;
+    /** 工作流名字*/
+    @TableField("name")
+    private String name;
+    @TableField("create_time")
+    private Date createTime;
+    @TableField("category_id")
+    private String categoryId;
+    @TableField("user_id")
+    private String userId;
+    /** 1084735479095889921 工作流的id */
+
+    /** 审批状态 */
+    @TableField("status")
+    private String status;
+    /** 类型 */
+    @TableField("type")
+    private String type;
+    /** 客户id 租客id  */
+    @TableField("tenant_id")
+    private String tenantId;
 
     @Override
     public void setId(String id) {
         this.id = id;
     }
+//    public static class Status {
+//        public static final Integer 事假 = 0;
+//        public static final Integer 病假 = 1;
+//        public static final Integer 年假 = 2;
+//        public static final Integer 丧假 = 3;
+//    }
 
 }

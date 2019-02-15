@@ -45,10 +45,6 @@ public class SecurityController {
 
             String msg = "未登录的用户";
 
-            /*if (StringUtils.isEmpty(type)){
-                response.sendRedirect("/admin/login.html");
-            }*/
-
             Subject subject = SecurityUtils.getSubject();
 
             if ((subject != null && subject.isAuthenticated()) || StringUtils.isEmpty(type)) {

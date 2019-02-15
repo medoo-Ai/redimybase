@@ -1,7 +1,6 @@
 package com.redimybase.manager.security.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.redimybase.manager.security.dto.UserListPage;
 import com.redimybase.manager.security.entity.UserEntity;
 import com.redimybase.manager.security.entity.dto.UserAddressListDTO;

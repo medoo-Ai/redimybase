@@ -1,9 +1,11 @@
 package com.aispread.admin.controller.system;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.redimybase.common.util.SequenceUtils;
 import com.redimybase.framework.bean.R;
 import com.redimybase.framework.exception.BusinessException;
 import com.redimybase.framework.web.TableController;
+import com.redimybase.manager.security.entity.OrgEntity;
 import com.redimybase.manager.security.entity.ResourceEntity;
 import com.redimybase.manager.security.entity.UserEntity;
 import com.redimybase.manager.security.mapper.ResourceMapper;
@@ -47,14 +49,15 @@ public class ResourceController extends TableController<String, ResourceEntity, 
         }
         if (StringUtils.isBlank(entity.getId())) {
             //key相同不添加
-            if (service.count(new QueryWrapper<ResourceEntity>().eq("resource_key", entity.getResourceKey())) > 0) {
-                throw new BusinessException(R.失败, "菜单key已存在");
-            }
+            entity.setResourceKey(SequenceUtils.getSequence());
             entity.setCreateTime(new Date());
 
             entity.setCreator(userEntity.getUserName());
             entity.setCreatorId(userEntity.getId());
         } else {
+            if (StringUtils.isBlank(entity.getResourceKey())) {
+                throw new BusinessException(R.失败, "资源KEY不能为空");
+            }
             entity.setReviser(userEntity.getUserName());
             entity.setReviserId(userEntity.getId());
             entity.setUpdateTime(new Date());
@@ -68,6 +71,11 @@ public class ResourceController extends TableController<String, ResourceEntity, 
         super.beforeSave(entity);
     }
 
+    @Override
+    public R<?> save(ResourceEntity entity) {
+        super.save(entity);
+        return R.ok("菜单配置后不要忘了对角色分配访问权限哦");
+    }
     @Autowired
     private ResourceServiceImpl service;
 

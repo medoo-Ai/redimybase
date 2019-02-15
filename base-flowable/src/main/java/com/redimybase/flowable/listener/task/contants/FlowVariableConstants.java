@@ -11,7 +11,7 @@ public class FlowVariableConstants {
     public static final String 业务类型 = "^businessType";
     public static final String 业务单号 = "^businessId";
 
-    public static class TaskStatus{
+    public static class TaskStatus {
         public static final Integer 审批中 = 1;
         public static final Integer 已通过 = 2;
         public static final Integer 已拒绝 = 3;
