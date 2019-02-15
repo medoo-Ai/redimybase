@@ -1,4 +1,4 @@
-package com.aispread.manager.system;
+package com.aispread.manager.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
