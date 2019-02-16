@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aispread.manager.meetingNotice.mapper.MeetingReceiptMapper">
 
-    <select id="getMeetingReceiptList" resultType="com.aispread.manager.meetingNotice.dto.MeetingNoticrReceiptDTO">
+    <select id="getMeetingReceiptList" resultType="com.aispread.manager.meetingNotice.dto.MeetingNoticeReceiptDTO">
         select
         t1.id ReceiptId, t1.notice_id noticeId, t1.attend_user_id attendUserId,
         t2.user_name attendUserName, t1.receipt_time receiptTime, t1.receipt_type receiptType,
