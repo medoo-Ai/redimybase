@@ -1,7 +1,7 @@
 package com.aispread.admin.controller.meetingNotice;
 
 
-import com.aispread.manager.meetingNotice.dto.MeetingNoticrReceiptDTO;
+import com.aispread.manager.meetingNotice.dto.MeetingNoticeReceiptDTO;
 import com.aispread.manager.meetingNotice.entity.MeetingReceiptEntity;
 import com.aispread.manager.meetingNotice.mapper.MeetingReceiptMapper;
 import com.aispread.manager.meetingNotice.service.impl.MeetingReceiptServiceImpl;
@@ -33,8 +33,8 @@ public class MeetingReceiptController extends TableController<String, MeetingRec
 
     @PostMapping("getReceiptList")
     @ApiOperation("获取回执记录列表")
-    public R<?> getReceiptList(MeetingNoticrReceiptDTO query) {
-        Page<MeetingNoticrReceiptDTO> page = new Page<>();
+    public R<?> getReceiptList(MeetingNoticeReceiptDTO query) {
+        Page<MeetingNoticeReceiptDTO> page = new Page<>();
         page.setCurrent(query.getPage());
         page.setSize(query.getPageSize());
         return new R(service.getMeetingReceiptList(page, query));

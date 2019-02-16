@@ -1,6 +1,6 @@
 package com.aispread.manager.meetingNotice.service.impl;
 
-import com.aispread.manager.meetingNotice.dto.MeetingNoticrReceiptDTO;
+import com.aispread.manager.meetingNotice.dto.MeetingNoticeReceiptDTO;
 import com.aispread.manager.meetingNotice.entity.MeetingReceiptEntity;
 import com.aispread.manager.meetingNotice.mapper.MeetingReceiptMapper;
 import com.aispread.manager.meetingNotice.service.MeetingReceiptService;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class MeetingReceiptServiceImpl extends ServiceImpl<MeetingReceiptMapper, MeetingReceiptEntity> implements MeetingReceiptService {
 
     @Override
-    public Page getMeetingReceiptList(Page<MeetingNoticrReceiptDTO> page, MeetingNoticrReceiptDTO query) {
+    public Page getMeetingReceiptList(Page<MeetingNoticeReceiptDTO> page, MeetingNoticeReceiptDTO query) {
         return baseMapper.getMeetingReceiptList(page, query);
     }
 }
