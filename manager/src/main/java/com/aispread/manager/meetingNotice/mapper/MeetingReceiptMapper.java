@@ -1,6 +1,6 @@
 package com.aispread.manager.meetingNotice.mapper;
 
-import com.aispread.manager.meetingNotice.dto.MeetingNoticrReceiptDTO;
+import com.aispread.manager.meetingNotice.dto.MeetingNoticeReceiptDTO;
 import com.aispread.manager.meetingNotice.entity.MeetingReceiptEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,5 +15,5 @@ import org.apache.ibatis.annotations.Param;
  * @since 2019-01-28
  */
 public interface MeetingReceiptMapper extends BaseMapper<MeetingReceiptEntity> {
-    Page getMeetingReceiptList(Page<MeetingNoticrReceiptDTO> page, @Param("query")MeetingNoticrReceiptDTO query);
+    Page getMeetingReceiptList(Page<MeetingNoticeReceiptDTO> page, @Param("query") MeetingNoticeReceiptDTO query);
 }

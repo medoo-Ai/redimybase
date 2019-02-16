@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * Description :
  */
 @Data
-public class MeetingNoticrReceiptDTO implements Serializable {
+public class MeetingNoticeReceiptDTO implements Serializable {
 
     /**
      * 会议通知ID

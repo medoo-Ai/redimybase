@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * <p>
@@ -34,5 +33,4 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     public Page getNoticeList(Page<NoticeDTO> page, NoticeDTO notice) {
         return baseMapper.getNoticeList(page, notice);
     }
-
 }

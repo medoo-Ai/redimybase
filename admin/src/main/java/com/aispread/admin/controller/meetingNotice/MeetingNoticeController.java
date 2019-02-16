@@ -80,16 +80,14 @@ public class MeetingNoticeController extends TableController<String, MeetingNoti
         //判断有参会人员
         if (StringUtils.isNotBlank(users)) {
             List<String> userList = Arrays.asList(users.split(","));
-            List<MeetingReceiptEntity> receiptEntityList = new ArrayList<>();
             for (String userID : userList) {
                 MeetingReceiptEntity meetingReceiptEntity = new MeetingReceiptEntity();
                 meetingReceiptEntity.setNoticeId(entity.getId());
                 meetingReceiptEntity.setAttendUserId(userID);
                 meetingReceiptEntity.setReceiptType(MeetingReceiptEntity.ReceiptType.未回执);
-                receiptEntityList.add(meetingReceiptEntity);
+                //插入回执表
+                receiptService.save(meetingReceiptEntity);
             }
-            //批量插入回执表
-            receiptService.saveBatch(receiptEntityList);
         }
         return super.save(entity);
     }
