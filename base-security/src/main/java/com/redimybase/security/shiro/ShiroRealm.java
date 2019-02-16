@@ -23,7 +23,6 @@ import java.util.Collection;
  * Created by Irany 2018/5/13 12:10
  */
 @Component
-@PropertySource(value = {"classpath:application.properties"},encoding="utf-8")
 public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {

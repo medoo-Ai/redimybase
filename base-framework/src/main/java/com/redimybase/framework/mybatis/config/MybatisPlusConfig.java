@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +40,11 @@ public class MybatisPlusConfig {
     }
 
     @Bean("factoryBean")
-    public SqlSessionFactoryBean sqlSessionFactoryBean(DruidDataSource dataSource, MybatisConfiguration mybatisConfiguration) throws IOException {
+    public SqlSessionFactoryBean sqlSessionFactoryBean(DataSource dataSource, MybatisConfiguration mybatisConfiguration) throws IOException {
 
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource);
-        factoryBean.setTypeAliasesPackage("com.redimybase.manager.*.mapper,com.ainspread.manager.*.mapper");
+        factoryBean.setTypeAliasesPackage("com.redimybase.manager.*.mapper,com.aispread.manager.*.mapper");
         factoryBean.setMapperLocations(mapperResources());
         factoryBean.setConfiguration(mybatisConfiguration);
         Properties properties = new Properties();

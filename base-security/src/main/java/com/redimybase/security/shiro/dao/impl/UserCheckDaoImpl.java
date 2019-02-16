@@ -22,7 +22,6 @@ import java.util.List;
  * Created by Irany 2018/5/13 12:18
  */
 @Component("userCheckDaoImpl")
-@PropertySource(value = {"classpath:application.properties"}, encoding = "utf-8")
 public class UserCheckDaoImpl implements UserCheckDao {
     /**
      * 根据用户ID获取用户token信息
