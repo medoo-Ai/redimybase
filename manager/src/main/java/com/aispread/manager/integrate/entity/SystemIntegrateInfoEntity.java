@@ -4,31 +4,32 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 
+import java.io.Serializable;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.redimybase.framework.mybatis.id.IdEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 系统集成表
+ * 系统集成系统信息表
  * </p>
  *
  * @author vim
- * @since 2019-01-26
+ * @since 2019-02-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_system_integrate")
-@ApiModel("系统集成实体")
-public class SystemIntegrateEntity extends IdEntity<String> {
+@TableName("t_system_integrate_info")
+public class SystemIntegrateInfoEntity extends IdEntity<String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,40 +37,23 @@ public class SystemIntegrateEntity extends IdEntity<String> {
     private String id;
 
     /**
+     * 系统名称
+     */
+    @TableField("name")
+    private String name;
+
+    /**
      * 系统链接
      */
-    @TableField(exist = false)
-    @ApiModelProperty("系统链接")
+    @TableField("url")
     private String url;
 
     /**
      * 创建时间
      */
     @TableField("create_time")
-    @ApiModelProperty("创建时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-
-    /**
-     * 修改时间
-     */
-    @TableField("update_time")
-    @ApiModelProperty("修改时间")
-    private Date updateTime;
-
-    /**
-     * 用户ID
-     */
-    @TableField("user_id")
-    @ApiModelProperty("用户ID")
-    private String userId;
-
-    @ApiModelProperty("对应的系统ID")
-    private String systemId;
-
-    @TableField(exist = false)
-    private String name;
-
-    private String userName;
 
 
     public String getId() {
