@@ -1,0 +1,103 @@
+server:
+  port: 8094
+
+spring:
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure #过滤druid自动配置
+  redis:
+    host: localhost
+    password: irany
+    port: 6379
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 10000
+        max-idle: 8
+        min-idle: 5
+    timeout: 10000
+  datasource:
+    dynamic:
+      primary: master #设置默认的数据源或者数据源组,默认值即为master
+      datasource:
+        master:
+          username: dev_redi_db
+          password: Hellokitty666
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://123.206.207.161:3306/dev_redi_db?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+      druid:
+        initial-size:
+        max-active:
+        min-idle:
+        max-wait:
+        time-between-eviction-runs-millis:
+        time-between-log-stats-millis:
+        stat-sqlmax-size:
+        min-evictable-idle-time-millis:
+        max-evictable-idle-time-millis:
+        test-while-idle:
+        test-on-borrow:
+        test-on-return:
+        validation-query:
+        validation-query-timeout:
+        use-global-datasource-stat:
+        async-init:
+        clear-filters-enable:
+        reset-stat-enable:
+        not-full-timeout-retry-count:
+        max-wait-thread-count:
+        fail-fast:
+        phyTimeout-millis:
+        keep-alive:
+        pool-prepared-statements:
+        init-variants:
+        init-global-variants:
+        use-unfair-lock:
+        kill-when-socket-read-timeout:
+        connection-properties:
+        max-pool-prepared-statement-per-connection-size:
+        init-connection-sqls:
+        share-prepared-statements:
+        connection-errorretry-attempts:
+        break-after-acquire-failure:
+        filters: stat,wall # 注意这个值和druid原生不一致，默认启动了stat,wall
+  mail:
+    host: smtp.163.com
+    username: 17301781426@163.com
+    password: shouquanma123456
+    properties:
+      mail:
+        smtp:
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+
+redi:
+  useCaptcha: 0
+  usePhone: 1
+  useEmail: 1
+  useAccount: 1
+  idNo: 1
+  pwd:
+    useSalt: 1
+    salt: REDI_OA
+  rememberMeCookie:
+    maxAge: 86400
+  default:
+    init:
+      password: 123456
+  file:
+    save:
+      path: E:/mini_files/
+
+
+
+#flowable流程配置
+flowable:
+  check-process-definitions: true #是否检查流程定义更新
+  common:
+    app:
+      idm-url: a
+
+
+

@@ -1,0 +1,23 @@
+${AnsiColor.BRIGHT_YELLOW}
+
+
+               AAA               IIIIIIIIII   SSSSSSSSSSSSSSS PPPPPPPPPPPPPPPPP   RRRRRRRRRRRRRRRRR   EEEEEEEEEEEEEEEEEEEEEE               AAA               DDDDDDDDDDDDD
+              A:::A              I::::::::I SS:::::::::::::::SP::::::::::::::::P  R::::::::::::::::R  E::::::::::::::::::::E              A:::A              D::::::::::::DDD
+             A:::::A             I::::::::IS:::::SSSSSS::::::SP::::::PPPPPP:::::P R::::::RRRRRR:::::R E::::::::::::::::::::E             A:::::A             D:::::::::::::::DD
+            A:::::::A            II::::::IIS:::::S     SSSSSSSPP:::::P     P:::::PRR:::::R     R:::::REE::::::EEEEEEEEE::::E            A:::::::A            DDD:::::DDDDD:::::D
+           A:::::::::A             I::::I  S:::::S              P::::P     P:::::P  R::::R     R:::::R  E:::::E       EEEEEE           A:::::::::A             D:::::D    D:::::D
+          A:::::A:::::A            I::::I  S:::::S              P::::P     P:::::P  R::::R     R:::::R  E:::::E                       A:::::A:::::A            D:::::D     D:::::D
+         A:::::A A:::::A           I::::I   S::::SSSS           P::::PPPPPP:::::P   R::::RRRRRR:::::R   E::::::EEEEEEEEEE            A:::::A A:::::A           D:::::D     D:::::D
+        A:::::A   A:::::A          I::::I    SS::::::SSSSS      P:::::::::::::PP    R:::::::::::::RR    E:::::::::::::::E           A:::::A   A:::::A          D:::::D     D:::::D
+       A:::::A     A:::::A         I::::I      SSS::::::::SS    P::::PPPPPPPPP      R::::RRRRRR:::::R   E:::::::::::::::E          A:::::A     A:::::A         D:::::D     D:::::D
+      A:::::AAAAAAAAA:::::A        I::::I         SSSSSS::::S   P::::P              R::::R     R:::::R  E::::::EEEEEEEEEE         A:::::AAAAAAAAA:::::A        D:::::D     D:::::D
+     A:::::::::::::::::::::A       I::::I              S:::::S  P::::P              R::::R     R:::::R  E:::::E                  A:::::::::::::::::::::A       D:::::D     D:::::D
+    A:::::AAAAAAAAAAAAA:::::A      I::::I              S:::::S  P::::P              R::::R     R:::::R  E:::::E       EEEEEE    A:::::AAAAAAAAAAAAA:::::A      D:::::D    D:::::D
+   A:::::A             A:::::A   II::::::IISSSSSSS     S:::::SPP::::::PP          RR:::::R     R:::::REE::::::EEEEEEEE:::::E   A:::::A             A:::::A   DDD:::::DDDDD:::::D
+  A:::::A               A:::::A  I::::::::IS::::::SSSSSS:::::SP::::::::P          R::::::R     R:::::RE::::::::::::::::::::E  A:::::A               A:::::A  D:::::::::::::::DD
+ A:::::A                 A:::::A I::::::::IS:::::::::::::::SS P::::::::P          R::::::R     R:::::RE::::::::::::::::::::E A:::::A                 A:::::A D::::::::::::DDD
+AAAAAAA                   AAAAAAAIIIIIIIIII SSSSSSSSSSSSSSS   PPPPPPPPPP          RRRRRRRR     RRRRRRREEEEEEEEEEEEEEEEEEEEEEAAAAAAA                   AAAAAAADDDDDDDDDDDDD
+
+
+  ${AnsiColor.BLUE}
+ :: Spring Boot ::        (${spring-boot.version})
