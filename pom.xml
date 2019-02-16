@@ -103,6 +103,7 @@
         <flowable.version>6.3.0</flowable.version>
         <guava.version>23.0</guava.version>
         <swagger.version>2.9.2</swagger.version>
+        <druid.spring.version>1.1.10</druid.spring.version>
     </properties>
 
     <dependencyManagement>
@@ -388,6 +389,11 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.spring.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
