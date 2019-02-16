@@ -40,13 +40,13 @@ import java.util.Map;
 public class ShiroConfig {
 
 
-    @Value("${jedis.host}")
+    @Value("${spring.redis.host}")
     private String host;
-    @Value("${jedis.port}")
+    @Value("${spring.redis.port}")
     private int port;
-    @Value("${jedis.timeout}")
+    @Value("${spring.redis.timeout}")
     private Integer timeout;
-    @Value("${jedis.password}")
+    @Value("${spring.redis.password}")
     private String password;
 
     /**
