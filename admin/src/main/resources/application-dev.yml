@@ -16,50 +16,11 @@ spring:
         min-idle: 5
     timeout: 10000
   datasource:
-    dynamic:
-      primary: master #设置默认的数据源或者数据源组,默认值即为master
-      datasource:
-        master:
-          username: dev_redi_db
-          password: Hellokitty666
-          driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://123.206.207.161:3306/dev_redi_db?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
-      druid:
-        initial-size:
-        max-active:
-        min-idle:
-        max-wait:
-        time-between-eviction-runs-millis:
-        time-between-log-stats-millis:
-        stat-sqlmax-size:
-        min-evictable-idle-time-millis:
-        max-evictable-idle-time-millis:
-        test-while-idle:
-        test-on-borrow:
-        test-on-return:
-        validation-query:
-        validation-query-timeout:
-        use-global-datasource-stat:
-        async-init:
-        clear-filters-enable:
-        reset-stat-enable:
-        not-full-timeout-retry-count:
-        max-wait-thread-count:
-        fail-fast:
-        phyTimeout-millis:
-        keep-alive:
-        pool-prepared-statements:
-        init-variants:
-        init-global-variants:
-        use-unfair-lock:
-        kill-when-socket-read-timeout:
-        connection-properties:
-        max-pool-prepared-statement-per-connection-size:
-        init-connection-sqls:
-        share-prepared-statements:
-        connection-errorretry-attempts:
-        break-after-acquire-failure:
-        filters: stat,wall # 注意这个值和druid原生不一致，默认启动了stat,wall
+    username: dev_redi_db
+    password: Hellokitty666
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://123.206.207.161:3306/dev_redi_db?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+
   mail:
     host: smtp.163.com
     username: 17301781426@163.com
