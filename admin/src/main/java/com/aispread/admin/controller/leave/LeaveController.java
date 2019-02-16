@@ -1,11 +1,12 @@
 package com.aispread.admin.controller.leave;
 
-import com.aispread.manager.flowable.entity.FlowBusinessEntity;
 import com.aispread.manager.flowable.entity.FlowDefinitionEntity;
 import com.aispread.manager.flowable.service.impl.FlowDefinitionServiceImpl;
 import com.aispread.manager.leave.entity.HolidayRecordEntity;
 import com.aispread.manager.leave.mapper.HolidayRecordMapper;
 import com.aispread.manager.leave.service.impl.HolidayRecordServiceImpl;
+import com.aispread.manager.system.entity.SystemTypeList;
+import com.aispread.manager.system.mapper.SystemTypeListMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.redimybase.common.util.SequenceUtils;
@@ -20,12 +21,10 @@ import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @auther SyntacticSugar
@@ -41,6 +40,11 @@ public class LeaveController extends TableController<String, HolidayRecordEntity
     @Autowired
     private FlowDefinitionServiceImpl flowDefinitionService;
 
+
+    @Autowired
+    private SystemTypeListMapper  systemTypeListMapper;
+
+
     /**
      * 获取请假的时间天数
      *
@@ -50,7 +54,7 @@ public class LeaveController extends TableController<String, HolidayRecordEntity
      */
     @PostMapping("leaveCount")
     @ApiOperation(value = "获取请假的时间天数", notes = "传入字符串2013-10-09 15-00-00")
-    public R<?> getHolidaycouts(@ApiParam(value = "请假开始时间", name = "startDate") String startDate, @ApiParam(value = "请假结束时间", name = "endDate") String endDate) {
+    public R<?> getHolidaycounts(@ApiParam(value = "请假开始时间", name = "startDate") String startDate, @ApiParam(value = "请假结束时间", name = "endDate") String endDate) {
         HolidayRecordEntity holidayRecordEntity = new HolidayRecordEntity();
         holidayRecordEntity.setStartTime(startDate);
         holidayRecordEntity.setEndTime(endDate);
@@ -99,6 +103,25 @@ public class LeaveController extends TableController<String, HolidayRecordEntity
             e.printStackTrace();
             return R.failed("请假流程启动失败");
         }
+    }
+
+
+    /**
+     * 请假申请的类型
+     * @param userId
+     * @param page
+     * @param size
+     * @return
+     */
+    @RequestMapping("holiday")
+    @ApiOperation(value = "查看请假申请的类型列表")
+    public R<?> holiday(@ApiParam(value = "请假人ID", required = true)@SessionAttribute("userId") Long userId,
+                        @ApiParam(value = "页面的page默认0")@RequestParam(value = "page", defaultValue = "0") int page,
+                        @ApiParam(value = "页面的size默认10")@RequestParam(value = "size", defaultValue = "10") int size){
+        //查找请假的类型
+        List<SystemTypeList> overtype=systemTypeListMapper.findByTypeModel("t_holiday");
+        // 分页 ，待做
+        return R.ok(overtype);
     }
 
     @Override
