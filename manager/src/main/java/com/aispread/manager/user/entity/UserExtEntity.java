@@ -49,6 +49,17 @@ public class UserExtEntity extends IdEntity<String> {
     @TableField("station")
     private String station;
 
+    /**
+     * 家庭住址
+     */
+    @TableField("address")
+    private String address;
+
+    /**
+     * 生日
+     */
+    private String birthday;
+
     public String getId() {
         return id;
     }

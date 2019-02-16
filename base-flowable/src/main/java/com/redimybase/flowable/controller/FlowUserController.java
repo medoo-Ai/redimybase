@@ -1,6 +1,5 @@
 package com.redimybase.flowable.controller;
 
-import com.aispread.manager.flowable.entity.FlowButtonEntity;
 import com.aispread.manager.flowable.entity.FlowDefinitionEntity;
 import com.aispread.manager.flowable.entity.FlowNodeEntity;
 import com.aispread.manager.flowable.service.FlowDefinitionService;
@@ -58,7 +57,7 @@ public class FlowUserController extends TableController<String, FlowUserEntity, 
 
         if (StringUtils.isBlank(entity.getId())) {
             //新增
-            if (entity.getType() == FlowUserEntity.Type.USER || entity.getType() == FlowUserEntity.Type.INITIATOR || entity.getType() == FlowUserEntity.Type.LEADERSHIP) {
+            if (entity.getType() == FlowUserEntity.Type.普通用户 || entity.getType() == FlowUserEntity.Type.流程发起人 || entity.getType() == FlowUserEntity.Type.上级领导) {
                 FlowUserEntity one = service.getOne(new QueryWrapper<FlowUserEntity>().eq("node_id", entity.getNodeId()).select("id"));
                 if (null != one) {
                     service.removeById(one.getId());

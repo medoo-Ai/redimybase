@@ -26,8 +26,6 @@
         <module>admin</module>
         <module>manager</module>
         <module>base-flowable</module>
-        <module>back-api</module>
-        <module>back-manager</module>
     </modules>
 
     <!-- 设定仓库,按设定顺序进行查找. -->

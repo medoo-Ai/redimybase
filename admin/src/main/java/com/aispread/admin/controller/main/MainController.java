@@ -1,5 +1,7 @@
 package com.aispread.admin.controller.main;
 
+import com.aispread.manager.announcement.entity.AnnouncementEntity;
+import com.aispread.manager.announcement.service.AnnouncementService;
 import com.aispread.manager.banner.entity.AppBannerEntity;
 import com.aispread.manager.banner.service.AppBannerService;
 import com.aispread.manager.dict.entity.DictEntity;
@@ -90,6 +92,13 @@ public class MainController {
         doneTaskMainTaskPage.setTaskCount(actHiProcinstService.getDoneTaskCount(userId));
         data.put("doneTaskList", doneTaskMainTaskPage);
 
+        Page<AnnouncementEntity> announcementPage = new Page<>();
+        announcementPage.setCurrent(1);
+        announcementPage.setSize(8);
+        announcementPage.setDesc("create_time");
+
+        data.put("announcements", announcementService.page(announcementPage, new QueryWrapper<AnnouncementEntity>().eq("status", AnnouncementEntity.Status.已发布)).getRecords());
+
         return new R<>(data);
     }
 
@@ -137,4 +146,7 @@ public class MainController {
 
     @Autowired
     private ActHiProcinstService actHiProcinstService;
+
+    @Autowired
+    private AnnouncementService announcementService;
 }

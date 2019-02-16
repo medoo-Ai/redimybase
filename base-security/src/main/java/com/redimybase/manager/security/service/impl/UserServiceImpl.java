@@ -2,6 +2,8 @@ package com.redimybase.manager.security.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.redimybase.framework.bean.R;
+import com.redimybase.framework.exception.BusinessException;
 import com.redimybase.manager.security.dto.UserListPage;
 import com.redimybase.manager.security.entity.UserEntity;
 import com.redimybase.manager.security.entity.dto.UserAddressListDTO;
@@ -52,16 +54,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     }
 
     @Override
-    public Map<String, List<UserAddressListDTO>> getAddressList(String orgId,String orgName) {
+    public Map<String, List<UserAddressListDTO>> getAddressList(String orgId, String orgName) {
         if (StringUtils.isEmpty(orgId)) {
             orgId = null;
         }
         if (StringUtils.isEmpty(orgName)) {
             orgName = null;
-        }else{
+        } else {
             orgName = "%" + orgName + "%";
         }
-        List<UserAddressListDTO> addressList = baseMapper.getAddressList(orgId,orgName);
+        List<UserAddressListDTO> addressList = baseMapper.getAddressList(orgId, orgName);
         addressList.forEach(userAddressListDTO -> userAddressListDTO.setOrgName(baseMapper.getOrgFullName(userAddressListDTO.getOrgId())));
         return new UserAddressSort().sort(addressList);
     }
@@ -81,7 +83,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
                 String saltNewPwd = SecurityUtil.encryptPwd(newPwd, pwdSalt);
                 currentUser.setPassword(saltNewPwd);
                 updateById(currentUser);
+            }else{
+                throw new BusinessException(R.失败, "旧密码不正确,请尝试重新输入");
             }
+        } catch (BusinessException bse) {
+            throw bse;
         } catch (Exception e) {
             log.error("用户修改密码出错,msg:{}", e);
         }

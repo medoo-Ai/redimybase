@@ -70,11 +70,14 @@ public class FlowUserEntity extends IdEntity<String> {
     }
 
     public class Type {
-        public static final int INITIATOR = 0;
-        public static final int USER_GROUP = 1;
-        public static final int ORTHER_NODE = 2;
-        public static final int FROM_FORM = 3;
-        public static final int LEADERSHIP = 4;
-        public static final int USER = 5;
+        //TODO 目前流程只需要 上级领导,指定职位,流程发起人
+
+        public static final int 流程发起人 = 0;
+        public static final int 用户组 = 1;
+        public static final int 其他节点 = 2;
+        public static final int 来自表单 = 3;
+        public static final int 上级领导 = 4;
+        public static final int 普通用户 = 5;
+        public static final int 指定职位 = 6;
     }
 }

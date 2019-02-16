@@ -55,9 +55,9 @@ public class GetNextNodeAssigneeCmd implements Command<FlowNextNodeInfo> {
 
         List<String> userIdList = new ArrayList<>();
         for (FlowUserEntity userEntity : userEntities) {
-            if (FlowUserEntity.Type.USER == userEntity.getType() ||
-                    FlowUserEntity.Type.INITIATOR == userEntity.getType() ||
-                    FlowUserEntity.Type.LEADERSHIP == userEntity.getType()) {
+            if (FlowUserEntity.Type.普通用户 == userEntity.getType() ||
+                    FlowUserEntity.Type.流程发起人 == userEntity.getType() ||
+                    FlowUserEntity.Type.上级领导 == userEntity.getType()) {
                 userIdList.add(userEntity.getValue());
             }
         }

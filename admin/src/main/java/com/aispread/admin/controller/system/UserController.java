@@ -1,15 +1,16 @@
 package com.aispread.admin.controller.system;
 
+import com.aispread.manager.user.entity.UserExtEntity;
+import com.aispread.manager.user.service.UserExtService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.redimybase.framework.bean.R;
 import com.redimybase.framework.exception.BusinessException;
 import com.redimybase.framework.web.TableController;
 import com.redimybase.manager.security.dto.UserListPage;
-import com.redimybase.manager.security.entity.UserEntity;
-import com.redimybase.manager.security.entity.UserOrgEntity;
+import com.redimybase.manager.security.entity.*;
+import com.redimybase.manager.security.entity.dto.UserInfoDTO;
 import com.redimybase.manager.security.mapper.UserMapper;
-import com.redimybase.manager.security.service.UserOrgService;
-import com.redimybase.manager.security.service.UserRoleService;
+import com.redimybase.manager.security.service.*;
 import com.redimybase.manager.security.service.impl.UserServiceImpl;
 import com.redimybase.security.utils.SecurityUtil;
 import io.swagger.annotations.Api;
@@ -37,6 +38,76 @@ import com.alibaba.fastjson.annotation.JSONField;import java.util.Date;
 @Api(tags = {"用户信息接口"})
 public class UserController extends TableController<String, UserEntity, UserMapper, UserServiceImpl> {
 
+
+    /**
+     * 保存用户信息详情
+     */
+    @PostMapping("saveInfo")
+    @ApiOperation("保存用户信息详情")
+    public R<?> saveInfo(UserInfoDTO userInfoDTO) {
+        String currentUserId = SecurityUtil.getCurrentUserId();
+        if (StringUtils.isBlank(currentUserId)) {
+            return R.fail("用户凭证过期,请尝试重新登录");
+        }
+
+        //保存用户主表
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(currentUserId);
+        userEntity.setSex(userInfoDTO.getSex());
+        userEntity.setPhone(userInfoDTO.getPhone());
+        service.updateById(userEntity);
+
+        //保存用户拓展表
+        UserExtEntity userExtEntity = new UserExtEntity();
+        userExtEntity.setAddress(userInfoDTO.getAddress());
+        userExtEntity.setBirthday(userInfoDTO.getBirthday());
+        userExtEntity.setStation(userInfoDTO.getStation());
+        userExtService.update(userExtEntity, new QueryWrapper<UserExtEntity>().lambda().eq(UserExtEntity::getUserId, currentUserId));
+
+        return R.ok();
+    }
+
+    /**
+     * 获取指定用户的信息详情
+     */
+    @PostMapping("info")
+    @ApiOperation(value = "获取指定用户的信息详情")
+    public R<?> getInfo(String userId){
+
+        UserEntity currentUser = SecurityUtil.getCurrentUser();
+
+        UserExtEntity userExtEntity = userExtService.getOne(new QueryWrapper<UserExtEntity>().eq("user_id", currentUser.getId()));
+
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        userInfoDTO.setAddress(userExtEntity.getAddress());
+
+        if (StringUtils.isNotBlank(currentUser.getIdNo())) {
+
+            String idNo = currentUser.getIdNo();
+            userInfoDTO.setIdNo(currentUser.getIdNo());
+        }
+        //生日
+        userInfoDTO.setBirthday(userExtEntity.getBirthday());
+        UserOrgEntity userOrgEntity = userOrgService.getOne(new QueryWrapper<UserOrgEntity>().eq("user_id", currentUser.getId()).select("id,org_id"));
+        if (userOrgEntity != null) {
+            OrgEntity orgEntity = orgService.getOne(new QueryWrapper<OrgEntity>().eq("id", userOrgEntity.getOrgId()).select("id,name"));
+            userInfoDTO.setOrgName(orgEntity != null ? orgEntity.getName() : null);
+        }
+        UserPositionEntity userPositionEntity = userPositionService.getOne(new QueryWrapper<UserPositionEntity>().eq("user_id", currentUser.getId()).select("id,position_id"));
+
+        if (userPositionEntity != null) {
+            PositionEntity positionEntity = positionService.getOne(new QueryWrapper<PositionEntity>().eq("id", userPositionEntity.getPositionId()).select("id,name"));
+            userInfoDTO.setPositionName(positionEntity.getName());
+        }
+        userInfoDTO.setSex(currentUser.getSex());
+        userInfoDTO.setUserName(currentUser.getUserName());
+        userInfoDTO.setAvatarUrl(currentUser.getAvatarUrl());
+        userInfoDTO.setPhone(currentUser.getPhone());
+        userInfoDTO.setEmail(currentUser.getEmail());
+        userInfoDTO.setStation(userExtEntity.getStation());
+        userInfoDTO.setCreateTime(currentUser.getCreateTime());
+        return new R<>(userInfoDTO);
+    }
 
     /**
      * 获取用户列表
@@ -189,6 +260,18 @@ public class UserController extends TableController<String, UserEntity, UserMapp
 
     @Autowired
     private UserOrgService userOrgService;
+
+    @Autowired
+    private UserExtService userExtService;
+
+    @Autowired
+    private OrgService orgService;
+
+    @Autowired
+    private UserPositionService userPositionService;
+
+    @Autowired
+    private PositionService positionService;
 
     @Override
     protected UserServiceImpl getService() {

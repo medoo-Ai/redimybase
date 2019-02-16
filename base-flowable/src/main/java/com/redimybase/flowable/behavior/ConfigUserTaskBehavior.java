@@ -21,15 +21,10 @@ import org.flowable.bpmn.model.FlowElement;
 import org.flowable.bpmn.model.UserTask;
 import org.flowable.engine.common.impl.el.ExpressionManager;
 import org.flowable.engine.delegate.DelegateExecution;
-import org.flowable.engine.history.HistoricProcessInstance;
 import org.flowable.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
-import org.flowable.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.flowable.engine.impl.persistence.entity.HistoricProcessInstanceEntity;
-import org.flowable.engine.impl.util.CommandContextUtil;
 import org.flowable.task.service.TaskService;
-import org.flowable.task.service.impl.persistence.entity.HistoricTaskInstanceEntity;
 import org.flowable.task.service.impl.persistence.entity.TaskEntity;
-import org.flowable.variable.service.impl.persistence.entity.VariableInstanceEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +52,8 @@ public class ConfigUserTaskBehavior extends UserTaskActivityBehavior {
         flowRuFormService = SpringContextListener.getBean(FlowRuFormService.class);
         actHiVarinstService = SpringContextListener.getBean(ActHiVarinstService.class);
         flowAgentService = SpringContextListener.getBean(FlowAgentService.class);
+        userPositionService = SpringContextListener.getBean(UserPositionService.class);
+        userOrgService = SpringContextListener.getBean(UserOrgService.class);
 
     }
 
@@ -107,37 +104,20 @@ public class ConfigUserTaskBehavior extends UserTaskActivityBehavior {
         FlowAgentEntity flowAgentEntity;
         for (FlowRuUserEntity flowUserEntity : flowUserEntities) {
             switch (flowUserEntity.getType()) {
-                case FlowUserEntity.Type.INITIATOR:
+                case FlowUserEntity.Type.流程发起人:
                     task.setAssignee(startUserId);
                     break;
-                case FlowUserEntity.Type.USER:
-                    flowAgentEntity = flowAgentService.findAgent(flowUserEntity.getValue(), task.getProcessDefinitionId());
-                    if (null != flowAgentEntity) {
-                        //代理设置
-                        task.setAssignee(flowAgentEntity.getAgentId());
-                    } else {
-                        task.setAssignee(flowUserEntity.getValue());
-                    }
-                    break;
-                case FlowUserEntity.Type.USER_GROUP:
-                    List<UserRoleEntity> userRoleEntities = userRoleService.list(new QueryWrapper<UserRoleEntity>().eq("role_id", flowUserEntity.getValue()).select("user_id"));
-                    for (UserRoleEntity userRoleEntity : userRoleEntities) {
-                        flowAgentEntity = flowAgentService.findAgent(flowUserEntity.getValue(), task.getProcessDefinitionId());
-                        if (null != flowAgentEntity) {
-                            //代理设置
-                            task.addCandidateUser(flowAgentEntity.getAgentId());
-                        } else {
-                            task.addCandidateUser(userRoleEntity.getUserId());
-                        }
-                    }
-                    break;
-                case FlowUserEntity.Type.ORTHER_NODE:
-                case FlowUserEntity.Type.FROM_FORM:
-                    //来自节点或表单用户
-                    task.addCandidateUser(flowUserEntity.getValue());
-                    break;
+                case FlowUserEntity.Type.指定职位:
+                    UserOrgEntity userOrgEntity = userOrgService.getOne(new QueryWrapper<UserOrgEntity>().lambda().eq(UserOrgEntity::getUserId, startUserId).select(UserOrgEntity::getId, UserOrgEntity::getOrgId));
 
-                case FlowUserEntity.Type.LEADERSHIP:
+                    PositionEntity positionEntity = positionService.getOne(new QueryWrapper<PositionEntity>().lambda().eq(PositionEntity::getOrgId, userOrgEntity.getOrgId()).select(PositionEntity::getId));
+
+                    UserPositionEntity userPositionEntity = userPositionService.getOne(new QueryWrapper<UserPositionEntity>().lambda().eq(UserPositionEntity::getPositionId, positionEntity.getId()).select(UserPositionEntity::getId, UserPositionEntity::getUserId));
+
+                    task.setAssignee(userPositionEntity.getUserId());
+
+                    break;
+                case FlowUserEntity.Type.上级领导:
                     //上级领导
                     if (null != startUserId) {
                         String leadId = positionService.getLeadershipId(startUserId);
@@ -151,6 +131,33 @@ public class ConfigUserTaskBehavior extends UserTaskActivityBehavior {
                     } else {
                         task.setAssignee(SecurityUtil.getCurrentUserId());
                     }
+                    break;
+
+                case FlowUserEntity.Type.普通用户:
+                    flowAgentEntity = flowAgentService.findAgent(flowUserEntity.getValue(), task.getProcessDefinitionId());
+                    if (null != flowAgentEntity) {
+                        //代理设置
+                        task.setAssignee(flowAgentEntity.getAgentId());
+                    } else {
+                        task.setAssignee(flowUserEntity.getValue());
+                    }
+                    break;
+                case FlowUserEntity.Type.用户组:
+                    List<UserRoleEntity> userRoleEntities = userRoleService.list(new QueryWrapper<UserRoleEntity>().eq("role_id", flowUserEntity.getValue()).select("user_id"));
+                    for (UserRoleEntity userRoleEntity : userRoleEntities) {
+                        flowAgentEntity = flowAgentService.findAgent(flowUserEntity.getValue(), task.getProcessDefinitionId());
+                        if (null != flowAgentEntity) {
+                            //代理设置
+                            task.addCandidateUser(flowAgentEntity.getAgentId());
+                        } else {
+                            task.addCandidateUser(userRoleEntity.getUserId());
+                        }
+                    }
+                    break;
+                case FlowUserEntity.Type.其他节点:
+                case FlowUserEntity.Type.来自表单:
+                    //来自节点或表单用户
+                    task.addCandidateUser(flowUserEntity.getValue());
                     break;
                 default:
                     break;
@@ -219,6 +226,8 @@ public class ConfigUserTaskBehavior extends UserTaskActivityBehavior {
     private UserRoleService userRoleService;
     private PositionService positionService;
     private ActHiVarinstService actHiVarinstService;
+    private UserPositionService userPositionService;
+    private UserOrgService userOrgService;
 
     private FlowAgentService flowAgentService;
 

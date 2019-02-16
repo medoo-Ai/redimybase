@@ -34,27 +34,27 @@ public class FlowUserServiceImpl extends ServiceImpl<FlowUserMapper, FlowUserEnt
     private void setFlowNodeUserType(List<FlowNodeUserDTO> dtos) {
         for (FlowNodeUserDTO flowNodeUserDTO : dtos) {
             switch (flowNodeUserDTO.getType()) {
-                case FlowUserEntity.Type.USER_GROUP:
+                case FlowUserEntity.Type.用户组:
                     flowNodeUserDTO.setTypeName("用户组");
                     break;
 
-                case FlowUserEntity.Type.ORTHER_NODE:
+                case FlowUserEntity.Type.其他节点:
                     flowNodeUserDTO.setTypeName("其他节点");
                     break;
 
-                case FlowUserEntity.Type.FROM_FORM:
+                case FlowUserEntity.Type.来自表单:
                     flowNodeUserDTO.setTypeName("来自表单");
                     break;
 
-                case FlowUserEntity.Type.LEADERSHIP:
+                case FlowUserEntity.Type.上级领导:
                     flowNodeUserDTO.setTypeName("上级领导");
                     break;
 
-                case FlowUserEntity.Type.INITIATOR:
+                case FlowUserEntity.Type.流程发起人:
                     flowNodeUserDTO.setTypeName("发起人");
                     break;
 
-                case FlowUserEntity.Type.USER:
+                case FlowUserEntity.Type.普通用户:
                     flowNodeUserDTO.setTypeName("普通用户");
                     break;
 

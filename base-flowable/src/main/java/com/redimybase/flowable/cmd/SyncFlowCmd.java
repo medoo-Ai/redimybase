@@ -17,8 +17,6 @@ import org.flowable.engine.common.impl.interceptor.CommandContext;
 
 import java.util.Collection;
 
-import com.alibaba.fastjson.annotation.JSONField;
-
 import java.util.Date;
 import java.util.List;
 
@@ -212,7 +210,7 @@ public class SyncFlowCmd implements Command<Void> {
 
             FlowUserEntity userEntity = new FlowUserEntity();
             userEntity.setSort(0);
-            userEntity.setType(FlowUserEntity.Type.USER);
+            userEntity.setType(FlowUserEntity.Type.普通用户);
             userEntity.setValue(userTask.getAssignee());
             userEntity.setNodeId(nodeId);
 
@@ -222,7 +220,7 @@ public class SyncFlowCmd implements Command<Void> {
         if (null != tempUsers && tempUsers.size() > 0) {
             FlowUserEntity userEntity = new FlowUserEntity();
             userEntity.setSort(0);
-            userEntity.setType(FlowUserEntity.Type.USER);
+            userEntity.setType(FlowUserEntity.Type.普通用户);
             userEntity.setValue(StringUtils.join(tempUsers));
             userEntity.setNodeId(nodeId);
 
@@ -234,7 +232,7 @@ public class SyncFlowCmd implements Command<Void> {
         if (null != tempUsers && tempUsers.size() > 0) {
             FlowUserEntity userEntity = new FlowUserEntity();
             userEntity.setSort(0);
-            userEntity.setType(FlowUserEntity.Type.USER_GROUP);
+            userEntity.setType(FlowUserEntity.Type.用户组);
             userEntity.setValue(StringUtils.join(tempUsers));
             userEntity.setNodeId(nodeId);
 
