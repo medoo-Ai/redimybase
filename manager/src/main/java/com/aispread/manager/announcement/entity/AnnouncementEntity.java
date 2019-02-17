@@ -3,6 +3,7 @@ package com.aispread.manager.announcement.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.redimybase.framework.mybatis.id.IdEntity;
 import io.swagger.annotations.ApiModelProperty;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -28,14 +29,14 @@ public class AnnouncementEntity extends IdEntity<String> {
 
   public static class Status{
     public static final Integer 已删除 = 0;
-    public static final Integer 审核中 = 1;
+    public static final Integer 草稿   = 1;
     public static final Integer 已发布 = 2;
     public static final Integer 已驳回 = 3;
     public static final Integer 已下架 = 4;
   }
   public static class Model{
     public static final Integer 公司公告 = 0;
-    public static final Integer 图片信息 = 1;
+    public static final Integer 图片公告 = 1;
   }
 
 
@@ -85,6 +86,7 @@ public class AnnouncementEntity extends IdEntity<String> {
    */
   @TableField("release_time")
   @ApiModelProperty(value = "发布时间")
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
   private Date releaseTime;
 
 
@@ -100,6 +102,7 @@ public class AnnouncementEntity extends IdEntity<String> {
    */
   @TableField("create_time")
   @ApiModelProperty(value = "创建时间")
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
   private Date createTime;
 
   /**
@@ -114,6 +117,7 @@ public class AnnouncementEntity extends IdEntity<String> {
    */
   @TableField("update_time")
   @ApiModelProperty(value = "更新时间")
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
   private Date updateTime;
 
   /**

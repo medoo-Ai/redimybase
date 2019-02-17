@@ -37,6 +37,14 @@ public class AppBannerEntity extends IdEntity<String> {
 
     private static final long serialVersionUID = 1L;
 
+    public static class Status{
+        public static final Integer 已删除 = 0;
+        public static final Integer 审核中 = 1;
+        public static final Integer 已发布 = 2;
+        public static final Integer 已驳回 = 3;
+        public static final Integer 已下架 = 4;
+    }
+
     @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
@@ -53,6 +61,12 @@ public class AppBannerEntity extends IdEntity<String> {
     private String url;
 
     /**
+     * 公告ID
+     */
+    @TableField("announcement_id")
+    private String announcementId;
+
+    /**
      * 简称
      */
     @TableField("short_name")
@@ -63,6 +77,12 @@ public class AppBannerEntity extends IdEntity<String> {
      */
     @TableField("sort")
     private Integer sort;
+
+    /**
+     * 排序
+     */
+    @TableField("status")
+    private Integer status;
 
     /**
      * 创建时间

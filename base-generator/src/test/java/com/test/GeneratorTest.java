@@ -16,10 +16,11 @@ public class GeneratorTest {
 
     @Test
     public void generateCode() {
-        String packageName = "com.aispread.manager.flowable";      //包路径
+        String packageName = "com.aispread.manager.device";      //包路径
         boolean serviceNameStartWithI = false;//user -> UserService, 设置成true: user -> IUserService
         generateByTables(false, "t_", packageName,
-                "act_re_procdef");
+                "t_device_type");
+//        ,t_unit,t_brand,t_device_type,t_device
     }
 
     private void generateByTables(boolean serviceNameStartWithI, String tablePrefix, String packageName, String... tableNames) {
@@ -42,7 +43,7 @@ public class GeneratorTest {
                 .setNaming(NamingStrategy.underline_to_camel)
                 .setInclude(tableNames);//修改替换成你需要的表名，多个表名传数组
         config.setActiveRecord(false)
-                .setAuthor("vim")
+                .setAuthor("Mr.D")
                 .setOutputDir("d:\\codeGen")
                 .setFileOverride(true);
         if (!serviceNameStartWithI) {

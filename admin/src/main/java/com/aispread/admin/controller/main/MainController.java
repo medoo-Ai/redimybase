@@ -11,6 +11,7 @@ import com.aispread.manager.flowable.entity.ActRuTaskEntity;
 import com.aispread.manager.flowable.service.ActHiProcinstService;
 import com.aispread.manager.flowable.service.ActHiTaskinstService;
 import com.aispread.manager.flowable.service.ActRuTaskService;
+import com.aispread.manager.model.entity.DeviceModelEntity;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.redimybase.framework.bean.R;
@@ -52,7 +53,10 @@ public class MainController {
         page.setDesc("sort");
 
         //首页banner
-        data.put("banners", appBannerService.page(page, new QueryWrapper<>()));
+        QueryWrapper<AppBannerEntity> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.and(i -> i.ne("status", 0));
+        queryWrapper.and(i -> i.eq("status",2));
+        data.put("banners", appBannerService.page(page,queryWrapper));
 
         String userId = SecurityUtil.getCurrentUserId();
 

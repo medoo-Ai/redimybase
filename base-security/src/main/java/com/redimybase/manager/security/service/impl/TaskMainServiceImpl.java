@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.redimybase.framework.bean.R;
 import com.redimybase.framework.exception.BusinessException;
-import com.redimybase.manager.security.entity.DeviceEntity;
 import com.redimybase.manager.security.entity.TaskMainEntity;
 import com.redimybase.manager.security.entity.TaskMainEntity.Status;
 import com.redimybase.manager.security.entity.TaskMainEntity.TaskStatus;
@@ -98,7 +97,7 @@ public class TaskMainServiceImpl extends ServiceImpl<TaskMainMapper, TaskMainEnt
     List<TaskMainDTO> relateTaskMainDtoList =  getRelatedMainTaskList(result.getRecords());
     /*count*/
     QueryWrapper<TaskMainEntity> queryWrapper = new QueryWrapper<>();
-    queryWrapper.and(i -> i.eq("status", TaskMainEntity.Status.启用).or().eq("status", DeviceEntity.Status.禁用));
+    queryWrapper.and(i -> i.eq("status", TaskMainEntity.Status.启用).or().eq("status", TaskMainEntity.Status.禁用));
     /*备份分页相关数据*/
     long pg_no = page.getCurrent();
     long pg_size = page.getSize();

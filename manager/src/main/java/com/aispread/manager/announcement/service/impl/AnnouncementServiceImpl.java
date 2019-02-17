@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,11 +43,14 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
   public boolean removeById(Serializable id) {
     AnnouncementEntity byId = packageGetById(id);
     if(!byId.getReleaseUser().equals(SecurityUtil.getCurrentUserId())){
-      throw new BusinessException(R.失败,"您不可以操作其他人发布的通告.");
+      throw new BusinessException(R.失败,"您不可以操作其他人创建的通告.");
     }
     /*状态校验*/
-    if(byId.getStatus() == Status.审核中){
+    if(byId.getStatus() == Status.草稿){
       throw new BusinessException(R.失败,"当前状态不可修改通告数据!");
+    }
+    if(byId.getStatus() == Status.已发布 ){
+        throw new BusinessException(R.失败,"不允许删除已发布状态的公告,如需删除请先下架该公告");
     }
     byId.setStatus(Status.已删除);
     return updateById(byId);
@@ -78,9 +80,10 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
     if(entity != null && entity.getCreateTime() == null){
       entity.setCreateTime(new Date());
       entity.setCreatorId(SecurityUtil.getCurrentUserId());
+    }
+    if(entity.getStatus() == Status.已发布){
       entity.setReleaseTime(entity.getCreateTime());
       entity.setReleaseUser(entity.getCreatorId());
-      entity.setStatus(Status.审核中);
     }
     return super.save(entity);
   }
@@ -90,6 +93,10 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
   public boolean updateById(AnnouncementEntity entity) {
     entity.setUpdateTime(new Date());
     entity.setUpdaterId(SecurityUtil.getCurrentUserId());
+    if(entity.getStatus() == Status.已发布 && entity.getReleaseTime() == null){
+      entity.setReleaseTime(new Date());
+      entity.setReleaseUser(SecurityUtil.getCurrentUserId());
+    }
     return super.updateById(entity);
   }
 
@@ -118,6 +125,9 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
     if(StringUtils.isBlank(dto.getAttachmentId())){
       throw new BusinessException(R.失败,"图片附件ID不能为空.");
     }
+    if(dto.getStatus() != Status.草稿 && dto.getStatus() != Status.已发布){
+      throw new BusinessException(R.失败,"无效的公告状态,值范围[1:草稿,2:已发布].");
+    }
 
     /*保存轮播图*/
     AppBannerEntity appBannerEntity = new AppBannerEntity();
@@ -125,20 +135,24 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
     appBannerEntity.setCreateTime(new Date());
     appBannerEntity.setSort(dto.getImgSort());
     appBannerEntity.setUrl(dto.getAttachmentId());
+    appBannerEntity.setStatus(dto.getStatus());
     appBannerService.save(appBannerEntity);
 
-    /*关联轮播图*/
+    /*保存公告并关联轮播图*/
     AnnouncementEntity entity = new AnnouncementEntity();
     entity.setTitle(dto.getTitle());
+    entity.setContent(dto.getContent());
     entity.setAttachmentId(dto.getAttachmentId());
-    entity.setStatus(Status.已发布);
-    entity.setModel(Model.图片信息);
-    entity.setReleaseUser(SecurityUtil.getCurrentUserId());
-    entity.setReleaseTime(new Date());
-    entity.setCreateTime(entity.getReleaseTime());
-    entity.setCreatorId(entity.getReleaseUser());
+    entity.setStatus(dto.getStatus());
+
+    entity.setModel(Model.图片公告);
+    /*entity.setReleaseUser(SecurityUtil.getCurrentUserId());*/
     entity.setAppBannerId(appBannerEntity.getId());
     save(entity);
+
+    /*反向关联*/
+    appBannerEntity.setAnnouncementId(entity.getId());
+    appBannerService.updateById(appBannerEntity);
 
     return true;
   }
@@ -152,51 +166,62 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
 
     AnnouncementEntity byId = packageGetById(dto.getId());
     Integer model = byId.getModel();
-    if(model == dto.getModel() && model == Model.图片信息){
+    if(model == dto.getModel() && model == Model.图片公告){
       if(StringUtils.isBlank(dto.getAppBannerId())){
         throw new BusinessException(R.失败,"appBannerId(图片ID)不能为空.");
       }
-      AppBannerEntity appBannerEntity = new AppBannerEntity();
+      AppBannerEntity appBannerEntity = appBannerService.getById(dto.getAppBannerId());
+      if(appBannerEntity ==  null){
+        throw new BusinessException(R.失败,"无效的AppBannerId:" + dto.getAppBannerId());
+      }
       appBannerEntity.setUrl(dto.getAttachmentId());
       appBannerEntity.setSort(dto.getImgSort());
       appBannerEntity.setName(dto.getTitle());
       appBannerEntity.setId(dto.getAppBannerId());
-      return appBannerService.updateById(appBannerEntity);
-    }else if(dto.getModel() == Model.图片信息){
-      /*由公司公告切换为图片信息*/
-      /*校验*/
-      /*if(StringUtils.isBlank(dto.getAppBannerId())){
+      appBannerEntity.setStatus(dto.getStatus());
+      appBannerService.updateById(appBannerEntity);
+      byId.setContent(dto.getContent());
+      byId.setStatus(dto.getStatus());
+      byId.setAttachmentId(dto.getAttachmentId());
+      byId.setTitle(dto.getTitle());
+      updateById(byId);
+      return true;
+    }
+    /*else if(dto.getModel() == Model.图片公告){
+      *//*由公司公告切换为图片信息*//*
+      *//*校验*//*
+      *//*if(StringUtils.isBlank(dto.getAppBannerId())){
         throw new BusinessException(R.失败,"appBannerId(图片ID)不能为空.");
-      }*/
+      }*//*
       if(StringUtils.isBlank(dto.getAttachmentId())){
         throw new BusinessException(R.失败,"attachmentId(轮播图片附件ID)不能为空.");
       }
-      if(byId.getStatus() == Status.审核中
+      if(byId.getStatus() == Status.草稿
           || byId.getStatus() == Status.已发布
           || byId.getStatus() == Status.已删除 ){
         throw new BusinessException(R.失败,"当前状态不可修改通告数据!");
       }
       if(!byId.getReleaseUser().equals(SecurityUtil.getCurrentUserId())){
-        throw new BusinessException(R.失败,"您不可以操作其他人发布的通告.");
+        throw new BusinessException(R.失败,"您不可以操作其他人创建的通告.");
       }
-      /*保存轮播图*/
+      *//*保存轮播图*//*
       AppBannerEntity appBannerEntity = new AppBannerEntity();
       appBannerEntity.setName(dto.getTitle());
       appBannerEntity.setCreateTime(new Date());
       appBannerEntity.setSort(dto.getImgSort());
       appBannerEntity.setUrl(dto.getAttachmentId());
       appBannerService.save(appBannerEntity);
-      /*关联轮播图*/
+      *//*关联轮播图*//*
       byId.setTitle(dto.getTitle());
       byId.setAttachmentId(dto.getAttachmentId());
       byId.setStatus(Status.已发布);
-      byId.setModel(Model.图片信息);
+      byId.setModel(Model.图片公告);
       byId.setAppBannerId(appBannerEntity.getId());
       updateById(byId);
-      /*清空原始公告字段*/
+      *//*清空原始公告字段*//*
       baseMapper.switchToImg(dto.getId());
       return true;
-    }
+    }*/
     return false;
   }
 
@@ -207,6 +232,10 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
    * @throws BusinessException
    */
   public boolean packageSave(AnnouncementSaveDTO dto) throws BusinessException{
+
+    if(dto.getStatus() != Status.草稿 && dto.getStatus() != Status.已发布){
+      throw new BusinessException(R.失败,"无效的公告状态,值范围[1:草稿,2:已发布].");
+    }
     AnnouncementEntity entity = new AnnouncementEntity();
     entity.setId(dto.getId());
     entity.setTitle(dto.getTitle());
@@ -214,6 +243,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
     entity.setContent(dto.getContent());
     entity.setAttachmentId(dto.getAttachmentId());
     entity.setAppBannerId(dto.getAppBannerId());
+    entity.setStatus(dto.getStatus());
     /*校验*/
       if(StringUtils.isBlank(entity.getTitle())){
         throw new BusinessException(R.失败,"title(标题)不能为空.");
@@ -237,31 +267,31 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
     AnnouncementEntity getById = packageGetById(dto.getId());
     Integer model = getById.getModel();
     if(model == Model.公司公告 && model == dto.getModel()){
-      if(getById.getStatus() == Status.审核中
-          || getById.getStatus() == Status.已发布
+      if(getById.getStatus() == Status.已发布
           || getById.getStatus() == Status.已删除 ){
         throw new BusinessException(R.失败,"当前状态不可修改通告数据!");
       }
-      if(!getById.getReleaseUser().equals(SecurityUtil.getCurrentUserId())){
-        throw new BusinessException(R.失败,"您不可以操作其他人发布的通告.");
+      if(!getById.getCreatorId().equals(SecurityUtil.getCurrentUserId())){
+        throw new BusinessException(R.失败,"您不可以操作其他人创建的通告.");
       }
       AnnouncementEntity entity = new AnnouncementEntity();
       entity.setId(dto.getId());
       entity.setTitle(dto.getTitle());
       entity.setModel(dto.getModel());
       entity.setContent(dto.getContent());
+      entity.setStatus(dto.getStatus());
       return updateById(entity);
     }
-    else if(model == Model.图片信息){
-      /*由图片信息切换为公司公告,删除原始app轮播图并且走保存公司公告的逻辑*/
+    /*else if(model == Model.图片公告){
+      *//*由图片信息切换为公司公告,删除原始app轮播图并且走保存公司公告的逻辑*//*
       baseMapper.switchToAnnouncement(dto.getId());
       AnnouncementEntity entity = new AnnouncementEntity();
       entity.setId(dto.getId());
       entity.setTitle(dto.getTitle());
       entity.setModel(dto.getModel());
       entity.setContent(dto.getContent());
-      entity.setStatus(Status.审核中);
-      /*校验*/
+      entity.setStatus(Status.草稿);
+      *//*校验*//*
       if(StringUtils.isBlank(entity.getTitle())){
         throw new BusinessException(R.失败,"title(标题)不能为空.");
       }
@@ -276,7 +306,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
       }
       appBannerService.removeById(dto.getAppBannerId());
       return  updateById(entity);
-    }
+    }*/
     return false;
   }
 
@@ -304,17 +334,17 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
   public boolean rePublish(String id) {
     AnnouncementEntity entity = packageGetById(id);
     if(!entity.getReleaseUser().equals(SecurityUtil.getCurrentUserId())){
-      throw new BusinessException(R.失败,"您不可以操作其他人发布的通告.");
+      throw new BusinessException(R.失败,"您不可以操作其他人创建的通告.");
     }
     if(entity.getStatus() != Status.已驳回 && entity.getStatus() != Status.已下架){
       throw new BusinessException(R.失败,"当前状态不可重新发布.");
     }
-    /*图片信息不可重新发布*/
-    if(entity.getModel() == Model.图片信息){
+    /*图片信息不可重新发布*//*
+    if(entity.getModel() == Model.图片公告){
       throw new BusinessException(R.失败,"图片信息不可重新发布");
-    }
+    }*/
 
-    if(entity.getStatus() == Status.审核中
+    if(entity.getStatus() == Status.草稿
         || entity.getStatus() == Status.已发布
         || entity.getStatus() == Status.已删除 ){
       throw new BusinessException(R.失败,"当前状态不可重新发布通告数据!");
@@ -323,15 +353,18 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
       throw new BusinessException(R.失败,"您不可以发布操作其他人创建的通告.");
     }
     entity.setStatus(1);
-    return updateById(entity);
+    updateById(entity);
+    AppBannerEntity byId = appBannerService.getById(entity.getAppBannerId());
+    appBannerService.updateById(byId);
+    return true;
   }
 
   public boolean lowerShelf(String id) throws BusinessException{
     AnnouncementEntity entity = packageGetById(id);
-    /*图片信息不可重新发布*/
-    if(entity.getModel() == Model.图片信息){
+    /*图片信息不可重新发布*//*
+    if(entity.getModel() == Model.图片公告){
       throw new BusinessException(R.失败,"图片信息不可重新发布");
-    }
+    }*/
     if(entity.getStatus() != Status.已发布){
       throw new BusinessException(R.失败,"当前状态下的通告不可下架.");
     }
@@ -339,7 +372,13 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
       throw new BusinessException(R.失败,"您不可以下架其他人发布的通告.");
     }
     entity.setStatus(Status.已下架);
-    return updateById(entity);
+    updateById(entity);
+    if(entity.getModel() == Model.图片公告){
+      AppBannerEntity byId = appBannerService.getById(entity.getAppBannerId());
+      byId.setStatus(Status.已下架);
+      appBannerService.updateById(byId);
+    }
+    return true;
   }
 
 }

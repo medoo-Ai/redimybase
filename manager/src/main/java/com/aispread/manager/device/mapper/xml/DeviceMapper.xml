@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aispread.manager.device.mapper.DeviceMapper">
+  <select id="getDeviceDTOList" resultType="com.aispread.manager.device.entity.dto.DeviceDto">
+    select
+      t1.id,t1.name,t1.type_id as typeId,t2.name as typeName,t2.parent as parentTypeId,t3.name as parentTypeName,t1.status,t1.remark,
+      t1.brand_id as brandId,t4.name as brandName,t1.model_id as modelId,t5.name as modelName,t1.unit_id as unitId,t6.name as unitName,
+      t1.create_at as createAt,t1.create_by as createBy,t7.user_name as createName,t1.update_at as updateAt,t1.update_by as updateBy,
+      t8.user_name as updateName
+    from
+      t_device t1
+      left join t_device_type t2 on t1.type_id = t2.id
+      left join t_device_type t3 on t2.parent = t3.id
+      left join t_brand t4 on t1.brand_id = t4.id
+      left join t_model t5 on t1.model_id = t5.id
+      left join t_unit t6 on t1.unit_id = t6.id
+      left join t_user t7 on t1.create_by = t7.id
+      left join t_user t8 on t1.update_by = t8.id
+    where
+    t1.status != 0
+    <if test="(query.name != null) and (query.name != '')">
+      <![CDATA[
+          and t1.name like CONCAT(CONCAT('%', #{query.name,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+    <if test="(query.typeId != null) and (query.typeId != '')">
+      <![CDATA[
+          and t2.id = #{query.typeId,jdbcType=VARCHAR}
+      ]]>
+    </if>
+    <if test="(query.typeName != null) and (query.typeName != '')">
+      <![CDATA[
+          and t2.name like CONCAT(CONCAT('%', #{query.typeName,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+    <if test="(query.parentTypeId != null) and (query.parentTypeId != '')">
+      <![CDATA[
+          and t2.parent = #{query.parentTypeId,jdbcType=VARCHAR}
+      ]]>
+    </if>
+    <if test="(query.parentTypeName != null) and (query.parentTypeName != '')">
+      <![CDATA[
+          and t3.name like CONCAT(CONCAT('%', #{query.parentTypeName,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+    <if test="(query.brandId != null) and (query.brandId != '')">
+      <![CDATA[
+          and t1.brand_id = #{query.brandId,jdbcType=VARCHAR}
+      ]]>
+    </if>
+    <if test="(query.brandName != null) and (query.brandName != '')">
+      <![CDATA[
+          and t4.name like CONCAT(CONCAT('%', #{query.brandName,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+    <if test="(query.modelId != null) and (query.modelId != '')">
+      <![CDATA[
+          and t1.model_id = #{query.modelId,jdbcType=VARCHAR}
+      ]]>
+    </if>
+    <if test="(query.modelName != null) and (query.modelName != '')">
+      <![CDATA[
+          and t5.name like CONCAT(CONCAT('%', #{query.modelName,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+    <if test="(query.unitId != null) and (query.unitId != '')">
+      <![CDATA[
+          and t1.unit_id = #{query.unitId,jdbcType=VARCHAR}
+      ]]>
+    </if>
+    <if test="(query.unitName != null) and (query.unitName != '')">
+      <![CDATA[
+          and t5.name like CONCAT(CONCAT('%', #{query.unitName,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+    <if test="(query.remark != null) and (query.remark != '')">
+      <![CDATA[
+          and t1.remark like CONCAT(CONCAT('%', #{query.remark,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+    <if test="(query.status != null) and (query.status != '')">
+      <![CDATA[
+          and t1.status = #{query.status,jdbcType=VARCHAR}
+      ]]>
+    </if>
+    <if test="(query.createBy != null) and (query.createBy != '')">
+      <![CDATA[
+          and t7.id = #{query.createBy,jdbcType=VARCHAR}
+      ]]>
+    </if>
+    <if test="(query.createName != null) and (query.createName != '')">
+      <![CDATA[
+          and t7.name like CONCAT(CONCAT('%', #{query.createName,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+    <if test="(query.updateBy != null) and (query.updateBy != '')">
+      <![CDATA[
+          and t8.id = #{query.updateBy,jdbcType=VARCHAR}
+      ]]>
+    </if>
+    <if test="(query.updateName != null) and (query.updateName != '')">
+      <![CDATA[
+          and t8.name like CONCAT(CONCAT('%', #{query.updateName,jdbcType=VARCHAR}),'%')
+      ]]>
+    </if>
+  </select>
+</mapper>

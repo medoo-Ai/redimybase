@@ -50,5 +50,11 @@ public class AnnouncementSaveDTO {
   @ApiModelProperty(value = "轮播图片ID")
   private String appBannerId;
 
+  /**
+   * 公告状态(0:草稿,1:发布)
+   */
+  @ApiModelProperty(value = "公告状态(0:草稿,1:发布)")
+  private Integer status;
+
 
 }

@@ -1,6 +1,7 @@
 package com.aispread.manager.announcement.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import lombok.Data;
@@ -53,6 +54,7 @@ public class AnnouncementListDTO {
    * 发布时间
    */
   @ApiModelProperty(value = "发布时间")
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
   private Date releaseTime;
 
 
@@ -66,6 +68,7 @@ public class AnnouncementListDTO {
    * 创建时间
    */
   @ApiModelProperty(value = "创建时间")
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
   private Date createTime;
 
   /**
@@ -84,6 +87,7 @@ public class AnnouncementListDTO {
    * 最后更新时间
    */
   @ApiModelProperty(value = "更新时间")
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
   private Date updateTime;
 
   /**
@@ -107,7 +111,7 @@ public class AnnouncementListDTO {
   /**
    * app轮播ID
    */
-  @ApiModelProperty(value = "app轮播ID")
+  @ApiModelProperty(value = "app轮播图ID")
   private String appBannerId;
 
 }
