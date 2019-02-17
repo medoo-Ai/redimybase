@@ -2,8 +2,11 @@ package com.aispread.admin.controller.document;
 
 import com.aispread.manager.document.dto.DocumentListPage;
 import com.aispread.manager.document.entity.DocumentEntity;
+import com.aispread.manager.document.entity.DocumentLabelEntity;
+import com.aispread.manager.document.entity.DocumentLabelUnionEntity;
 import com.aispread.manager.document.entity.DocumentLogEntity;
 import com.aispread.manager.document.mapper.DocumentMapper;
+import com.aispread.manager.document.service.DocumentLabelUnionService;
 import com.aispread.manager.document.service.DocumentLogService;
 import com.aispread.manager.document.service.impl.DocumentServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -88,11 +91,13 @@ public class DocumentController extends TableController<String, DocumentEntity, 
             entity.setCreator(currentUser.getUserName());
             entity.setCreatorId(currentUser.getId());
             service.save(entity);
+            saveLabel(entity);
             logEntity.setDocumentId(entity.getId());
             logEntity.setName("添加文档");
             logEntity.setContent(String.format("%s 添加了文档[%s]", currentUser.getUserName(), entity.getName()));
         } else {
             DocumentEntity documentEntity = service.getById(entity.getId());
+            saveLabel(documentEntity);
             service.updateById(documentEntity);
             logEntity.setDocumentId(documentEntity.getId());
             logEntity.setName("修改文档");
@@ -106,6 +111,21 @@ public class DocumentController extends TableController<String, DocumentEntity, 
 
         logService.save(logEntity);
         return R.ok();
+    }
+
+    /**
+     * 保存文档标签
+     */
+    private void saveLabel(DocumentEntity entity) {
+        if (StringUtils.isNotBlank(entity.getLabel())) {
+            String[] labelArray = entity.getLabel().split(",");
+            for (String labelId : labelArray) {
+                DocumentLabelUnionEntity unionEntity = new DocumentLabelUnionEntity();
+                unionEntity.setDocumentId(entity.getId());
+                unionEntity.setLabelId(labelId);
+                documentLabelUnionService.save(unionEntity);
+            }
+        }
     }
 
     @Override
@@ -167,6 +187,9 @@ public class DocumentController extends TableController<String, DocumentEntity, 
 
         return R.ok();
     }
+
+    @Autowired
+    private DocumentLabelUnionService documentLabelUnionService;
 
     @Autowired
     private DocumentLogService logService;
