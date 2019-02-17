@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.redimybase.framework.mybatis.id.IdEntity;
 import io.swagger.annotations.ApiModel;
@@ -48,7 +49,7 @@ public class DocumentLabelEntity extends IdEntity<String> {
      */
     @TableField("create_time")
     @ApiModelProperty("创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 创建人ID

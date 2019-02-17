@@ -13,6 +13,7 @@ import com.redimybase.manager.security.service.impl.OrgServiceImpl;
 import com.redimybase.security.utils.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class OrgController extends TableController<String, OrgEntity, OrgMapper,
     @PostMapping(value = "orgNodeList")
     @RequiresPermissions(value = {"system_org"})
     @ApiOperation(value = "获取组织部门树")
-    public R<?> orgNodeList(String type) {
+    public R<?> orgNodeList(@ApiParam("user:正常的组织架构树,org:全部组织架构树(包含已删除的)") String type) {
         return new R<>(service.orgNodeList(type));
     }
 

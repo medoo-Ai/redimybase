@@ -18,6 +18,7 @@ public class UserListPage<T> extends Page<T> {
 
     @ApiModelProperty(value = "组织ID")
     private String orgId;
+
     @ApiModelProperty(value = "手机号")
     private String phone;
 
