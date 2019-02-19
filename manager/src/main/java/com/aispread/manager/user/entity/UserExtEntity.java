@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.redimybase.framework.mybatis.id.IdEntity;
 import lombok.Data;
@@ -59,6 +60,11 @@ public class UserExtEntity extends IdEntity<String> {
      * 生日
      */
     private String birthday;
+
+    /**
+     * 入职时间
+     */
+    private Date hireDate;
 
     public String getId() {
         return id;

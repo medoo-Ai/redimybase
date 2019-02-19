@@ -101,6 +101,10 @@ public class DocumentEntity extends IdEntity<String> {
     @ApiModelProperty("标签")
     private String label;
 
+    @ApiModelProperty("文档后缀名")
+    @TableField(exist = false)
+    private String suffixType;
+
     public String getId() {
         return id;
     }

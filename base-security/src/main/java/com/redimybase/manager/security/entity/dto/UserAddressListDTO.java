@@ -3,6 +3,7 @@ package com.redimybase.manager.security.entity.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 人员通讯录DTO
@@ -67,5 +68,10 @@ public class UserAddressListDTO implements Serializable {
      */
     private String station;
 
+
+    /**
+     * 入职时间
+     */
+    private Date hireDate;
 
 }

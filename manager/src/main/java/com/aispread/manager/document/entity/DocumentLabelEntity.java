@@ -1,5 +1,6 @@
 package com.aispread.manager.document.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 
@@ -34,7 +35,7 @@ public class DocumentLabelEntity extends IdEntity<String> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId("id")
+    @TableId(value = "id",type = IdType.ID_WORKER_STR)
     private String id;
 
     /**

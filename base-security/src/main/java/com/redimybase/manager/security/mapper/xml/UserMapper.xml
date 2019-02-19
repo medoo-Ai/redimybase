@@ -30,6 +30,7 @@
         ,t1.avatar_url as avatar_url
         ,t6.office as office
         ,t6.station as station
+        ,t6.hire_date as hire_date
         FROM
         t_user t1
         right join t_user_org t2 on t1.id = t2.user_id
