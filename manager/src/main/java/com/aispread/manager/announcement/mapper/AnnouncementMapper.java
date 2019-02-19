@@ -6,7 +6,7 @@ import com.aispread.manager.announcement.entity.AnnouncementQueryDTO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.redimybase.framework.exception.BusinessException;
-import com.redimybase.manager.security.entity.dto.TaskMainDTO;
+import com.aispread.manager.jointtask.entity.TaskMainDTO;
 import org.apache.ibatis.annotations.Param;
 
 /**

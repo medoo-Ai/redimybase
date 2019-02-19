@@ -1,6 +1,6 @@
-package com.redimybase.manager.security.mapper;
+package com.aispread.manager.jointtask.mapper;
 
-import com.redimybase.manager.security.entity.TaskReadStatus;
+import com.aispread.manager.jointtask.entity.TaskReadStatus;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

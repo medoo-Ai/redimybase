@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.redimybase.framework.bean.R;
 import com.redimybase.framework.exception.BusinessException;
-import com.redimybase.manager.security.entity.dto.TaskMainDTO;
+import com.aispread.manager.jointtask.entity.TaskMainDTO;
 import com.redimybase.security.utils.SecurityUtil;
 import java.io.Serializable;
 import java.util.Collection;

@@ -1,10 +1,9 @@
-package com.redimybase.manager.security.entity.dto;
+package com.aispread.manager.jointtask.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 子任务DTO

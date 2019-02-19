@@ -5,7 +5,6 @@ import com.aispread.manager.device.entity.dto.DeviceDto;
 import com.aispread.manager.device.entity.dto.DeviceQueryDto;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.redimybase.manager.security.entity.dto.TaskMainDTO;
 import org.apache.ibatis.annotations.Param;
 
 /**

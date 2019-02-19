@@ -1,4 +1,4 @@
-package com.redimybase.manager.security.entity;
+package com.aispread.manager.jointtask.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;

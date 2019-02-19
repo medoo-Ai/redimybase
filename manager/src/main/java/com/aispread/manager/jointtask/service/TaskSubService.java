@@ -1,8 +1,8 @@
-package com.redimybase.manager.security.service;
+package com.aispread.manager.jointtask.service;
 
+import com.aispread.manager.jointtask.entity.TaskSubDTO;
+import com.aispread.manager.jointtask.entity.TaskSubEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.redimybase.manager.security.entity.TaskSubEntity;
-import com.redimybase.manager.security.entity.dto.TaskSubDTO;
 
 /**
  * <p>

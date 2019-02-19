@@ -1,7 +1,5 @@
-package com.redimybase.manager.security.entity.dto;
+package com.aispread.manager.jointtask.entity;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Data;
 
 /**
