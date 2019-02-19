@@ -204,6 +204,8 @@ public class UserController extends TableController<String, UserEntity, UserMapp
                 }
             }
             entity.setStatus(UserEntity.Status.ENABLE);
+            //默认头像
+            entity.setAvatarUrl("http://thyrsi.com/t6/671/1550303207x2890171671.png");
             entity.setCreateTime(new Date());
             entity.setCreator(currentUser.getUserName());
             entity.setCreatorId(currentUser.getId());
