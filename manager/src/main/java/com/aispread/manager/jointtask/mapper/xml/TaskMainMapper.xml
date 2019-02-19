@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.redimybase.manager.security.mapper.TaskMainMapper">
+<mapper namespace="com.aispread.manager.jointtask.mapper.TaskMainMapper">
 
-  <select id="getDTOById" parameterType="java.lang.String" resultType="com.redimybase.manager.security.entity.dto.TaskMainDTO">
+  <select id="getDTOById" parameterType="java.lang.String" resultType="com.aispread.manager.jointtask.entity.TaskMainDTO">
     select
       t1.*,
       t2.user_name as creatorName,
@@ -20,7 +20,7 @@
 
   </select>
 
-  <select id="getTaskMainList" resultType="com.redimybase.manager.security.entity.dto.TaskMainDTO">
+  <select id="getTaskMainList" resultType="com.aispread.manager.jointtask.entity.TaskMainDTO">
     SELECT
     t1.id,t1.title,t1.initiator,t2.user_name as initiatorName,t1.remark,t1.importance,t1.priority,t1.task_status as taskStatus,t1.release_time as releaseTime,t1.creator_id as creatorId,t3.user_name as creatorName,t1.reviser_id as reviserId,t4.user_name as reviserName,t1.create_time,t1.update_time,t1.last_date as lastDate
     FROM

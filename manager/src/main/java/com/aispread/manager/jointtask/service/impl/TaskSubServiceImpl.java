@@ -1,24 +1,19 @@
-package com.redimybase.manager.security.service.impl;
+package com.aispread.manager.jointtask.service.impl;
 
+import com.aispread.manager.jointtask.entity.TaskMainEntity;
+import com.aispread.manager.jointtask.entity.TaskReadStatus;
+import com.aispread.manager.jointtask.entity.TaskSubDTO;
+import com.aispread.manager.jointtask.entity.TaskSubEntity;
+import com.aispread.manager.jointtask.mapper.TaskSubMapper;
+import com.aispread.manager.jointtask.service.TaskSubService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.redimybase.framework.bean.R;
 import com.redimybase.framework.exception.BusinessException;
-import com.redimybase.manager.security.entity.TaskMainEntity;
-import com.redimybase.manager.security.entity.TaskMainEntity.TaskStatus;
-import com.redimybase.manager.security.entity.TaskReadStatus;
-import com.redimybase.manager.security.entity.TaskSubEntity;
-import com.redimybase.manager.security.entity.TaskSubEntity.Status;
-import com.redimybase.manager.security.entity.UserEntity;
-import com.redimybase.manager.security.entity.dto.TaskSubDTO;
-import com.redimybase.manager.security.mapper.TaskSubMapper;
-import com.redimybase.manager.security.service.TaskSubService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.redimybase.security.utils.SecurityUtil;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import com.alibaba.fastjson.annotation.JSONField;import java.util.Date;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +28,8 @@ import org.springframework.stereotype.Service;
  * @since 2019-01-11
  */
 @Service
-public class TaskSubServiceImpl extends ServiceImpl<TaskSubMapper, TaskSubEntity> implements TaskSubService {
+public class TaskSubServiceImpl extends ServiceImpl<TaskSubMapper, TaskSubEntity> implements
+    TaskSubService {
   @Autowired
   TaskReadStatusServiceImpl taskReadStatusService;
   @Autowired
@@ -114,7 +110,7 @@ public class TaskSubServiceImpl extends ServiceImpl<TaskSubMapper, TaskSubEntity
   @Override
   public boolean removeById(Serializable id) {
     TaskSubEntity byId = getById(id);
-    byId.setStatus(Status.删除);
+    byId.setStatus(TaskSubEntity.Status.删除);
     return updateById(byId);
   }
 

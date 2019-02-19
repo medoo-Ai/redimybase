@@ -1,6 +1,6 @@
-package com.redimybase.manager.security.service;
+package com.aispread.manager.jointtask.service;
 
-import com.redimybase.manager.security.entity.TaskReadStatus;
+import com.aispread.manager.jointtask.entity.TaskReadStatus;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

@@ -1,28 +1,26 @@
-package com.redimybase.manager.security.service.impl;
+package com.aispread.manager.jointtask.service.impl;
 
+import com.aispread.manager.jointtask.entity.TaskMainDTO;
+import com.aispread.manager.jointtask.entity.TaskMainEntity;
+import com.aispread.manager.jointtask.entity.TaskMainEntity.TaskStatus;
+import com.aispread.manager.jointtask.entity.TaskReadStatus;
+import com.aispread.manager.jointtask.entity.TaskSubDTO;
+import com.aispread.manager.jointtask.entity.TaskSubEntity;
+import com.aispread.manager.jointtask.mapper.TaskMainMapper;
+import com.aispread.manager.jointtask.service.TaskMainService;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.redimybase.framework.bean.R;
 import com.redimybase.framework.exception.BusinessException;
-import com.redimybase.manager.security.entity.TaskMainEntity;
-import com.redimybase.manager.security.entity.TaskMainEntity.Status;
-import com.redimybase.manager.security.entity.TaskMainEntity.TaskStatus;
-import com.redimybase.manager.security.entity.TaskReadStatus;
-import com.redimybase.manager.security.entity.TaskSubEntity;
 import com.redimybase.manager.security.entity.UserEntity;
-import com.redimybase.manager.security.entity.dto.TaskMainDTO;
-import com.redimybase.manager.security.entity.dto.TaskSubDTO;
-import com.redimybase.manager.security.mapper.TaskMainMapper;
-import com.redimybase.manager.security.service.TaskMainService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.redimybase.manager.security.service.impl.UserServiceImpl;
 import com.redimybase.security.utils.SecurityUtil;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import com.alibaba.fastjson.annotation.JSONField;import java.util.Date;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -456,7 +454,7 @@ public class TaskMainServiceImpl extends ServiceImpl<TaskMainMapper, TaskMainEnt
       entity.setCreateTime(new Date());
       entity.setCreatorId(currentiUser.getId());
       entity.setInitiator(currentiUser.getId());
-      entity.setStatus(Status.启用);
+      entity.setStatus(TaskMainEntity.Status.启用);
       entity.setTaskStatus(TaskStatus.未发布);
       if(entity.isRelease()){
         entity.setTaskStatus(TaskStatus.进行中);

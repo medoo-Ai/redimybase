@@ -1,12 +1,10 @@
-package com.redimybase.manager.security.mapper;
+package com.aispread.manager.jointtask.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.aispread.manager.jointtask.entity.TaskMainDTO;
+import com.aispread.manager.jointtask.entity.TaskMainEntity;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.redimybase.framework.exception.BusinessException;
-import com.redimybase.manager.security.entity.TaskMainEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.redimybase.manager.security.entity.dto.TaskMainDTO;
 import org.apache.ibatis.annotations.Param;
 
 /**

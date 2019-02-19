@@ -1,11 +1,9 @@
-package com.redimybase.manager.security.service;
+package com.aispread.manager.jointtask.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.aispread.manager.jointtask.entity.TaskMainEntity;
+import com.aispread.manager.jointtask.entity.TaskSubEntity;
 import com.redimybase.framework.exception.BusinessException;
-import com.redimybase.manager.security.entity.TaskMainEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.redimybase.manager.security.entity.TaskSubEntity;
-import com.redimybase.manager.security.entity.dto.TaskMainDTO;
 
 /**
  * <p>

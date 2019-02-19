@@ -1,8 +1,8 @@
-package com.redimybase.manager.security.mapper;
+package com.aispread.manager.jointtask.mapper;
 
-import com.redimybase.manager.security.entity.TaskSubEntity;
+import com.aispread.manager.jointtask.entity.TaskSubDTO;
+import com.aispread.manager.jointtask.entity.TaskSubEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.redimybase.manager.security.entity.dto.TaskSubDTO;
 import java.util.List;
 
 /**

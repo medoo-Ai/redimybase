@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.redimybase.framework.bean.R;
 import com.redimybase.framework.exception.BusinessException;
 import com.redimybase.framework.web.BaseController;
-import com.redimybase.manager.security.entity.dto.TaskMainDTO;
+import com.aispread.manager.jointtask.entity.TaskMainDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;

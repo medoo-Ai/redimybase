@@ -1,15 +1,10 @@
-package com.redimybase.manager.security.entity.dto;
+package com.aispread.manager.jointtask.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.redimybase.manager.security.entity.TaskSubEntity;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
-import net.sf.jsqlparser.expression.DateTimeLiteralExpression.DateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 子任务DTO
