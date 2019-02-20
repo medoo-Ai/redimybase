@@ -111,30 +111,30 @@ public class MeetingNoticeController extends TableController<String, MeetingNoti
         }
     }
 
-//    @Override
-//    @ApiOperation("查询收到的会议通知")
-//    public Object query(HttpServletRequest request) {
-//        UserEntity currentUser = SecurityUtil.getCurrentUser();
-//        if (null == currentUser) {
-//            throw new BusinessException(R.失败, "用户凭证过期,请尝试重新登录");
-//        }
-//
-//        TableModel<MeetingNoticeEntity> model = new TableModel<>();
-//        Page<MeetingNoticeEntity> page = (Page<MeetingNoticeEntity>) buildPageRequest(request);
-//        if (page == null) {
-//            page = new Page<>(1, 10);
-//        }
-//        QueryWrapper<MeetingNoticeEntity> queryWrapper = buildWrapper(getQueryColumn(request), getQueryValue(request));
-//        if (null == queryWrapper) {
-//            queryWrapper = new QueryWrapper<>();
-//        }
-//        queryWrapper.select("id", "title", "start_time", "end_time", "status", "creator_id", "creator", "create_time");
-//        queryWrapper.like("attend_user_id", currentUser.getId());
-//
-//        model.setData(getService().page(page, buildPageWrapper(queryWrapper, getQueryKey(request), getQuerySearch(request))));
-//
-//        return model;
-//    }
+    @Override
+    @ApiOperation("查询收到的会议通知")
+    public Object query(HttpServletRequest request) {
+        UserEntity currentUser = SecurityUtil.getCurrentUser();
+        if (null == currentUser) {
+            throw new BusinessException(R.失败, "用户凭证过期,请尝试重新登录");
+        }
+
+        TableModel<MeetingNoticeEntity> model = new TableModel<>();
+        Page<MeetingNoticeEntity> page = (Page<MeetingNoticeEntity>) buildPageRequest(request);
+        if (page == null) {
+            page = new Page<>(1, 10);
+        }
+        QueryWrapper<MeetingNoticeEntity> queryWrapper = buildWrapper(getQueryColumn(request), getQueryValue(request));
+        if (null == queryWrapper) {
+            queryWrapper = new QueryWrapper<>();
+        }
+        queryWrapper.select("id", "title", "start_time", "end_time", "status", "creator_id", "creator", "create_time");
+        queryWrapper.like("attend_user_id", currentUser.getId());
+
+        model.setData(getService().page(page, buildPageWrapper(queryWrapper, getQueryKey(request), getQuerySearch(request))));
+
+        return model;
+    }
 
     @PostMapping("queryReceivedNotice")
     @ApiOperation("查询收到的会议通知列表")
