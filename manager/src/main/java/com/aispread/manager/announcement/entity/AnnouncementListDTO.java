@@ -65,6 +65,12 @@ public class AnnouncementListDTO {
   private Integer status;
 
   /**
+   * 是否置顶
+   */
+  @ApiModelProperty(value = "是否置顶")
+  private String istop;
+
+  /**
    * 创建时间
    */
   @ApiModelProperty(value = "创建时间")
