@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 public class MeetingNoticeReceiptDTO implements Serializable {
 
     /**
+     * 回执ID
+     */
+    private String id;
+
+    /**
      * 会议通知ID
      */
     private String noticeId;
-
-    /**
-     * 回执ID
-     */
-    private String ReceiptId;
 
     /**
      * 参加人员ID

@@ -2,4 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aispread.manager.meetingNotice.mapper.MeetingNoticeMapper">
 
+    <select id="getReceivedNotice" resultType="com.aispread.manager.meetingNotice.dto.MeetingNoticeDTO">
+        select t1.id, t1.title, t1.start_time, t1.end_time,
+        t1.status, t1.creator_id, t1.creator, t1.create_time,
+        t2.receipt_type receoptStatus
+        from t_meeting_notice t1
+        inner join t_meeting_receipt t2
+        on t1.id = t2.notice_id
+        where t2.attend_user_id = #{query.attendUserId,jdbcType=VARCHAR}
+        <if test="(query.content != null) and (query.content != '')">
+            <![CDATA[
+            and t1.content like CONCAT(CONCAT('%', #{query.content,jdbcType=VARCHAR}),'%')
+          ]]>
+        </if>
+        <if test="(query.status != null) and (query.status != '')">
+            <![CDATA[
+            and t1.status = #{query.status,jdbcType=INTEGER}
+          ]]>
+        </if>
+        <if test="(query.startTime != null) and (query.startTime != '')">
+            <![CDATA[
+            and t1.startTime <= #{query.startTime,jdbcType=DATE}
+          ]]>
+        </if>
+        <if test="(query.endTime != null) and (query.endTime != '')">
+            <![CDATA[
+            and t1.endTime >= #{query.endTime,jdbcType=DATE}
+          ]]>
+        </if>
+    </select>
 </mapper>

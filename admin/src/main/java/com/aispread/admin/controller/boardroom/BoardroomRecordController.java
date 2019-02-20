@@ -124,6 +124,9 @@ public class BoardroomRecordController extends TableController<String, Boardroom
     @PostMapping("getReserveBoardRoomStatus")
     @ApiOperation("获取会议室预定情况")
     public R<?> getReserveBoardRoomStatus(String recordDate) {
+        if(StringUtils.isBlank(recordDate)){
+            throw new BusinessException(R.失败, "未输入预定日期");
+        }
         List<BoardroomRecordStatusDTO> list = new ArrayList<>();
 
         //获取会议室列表

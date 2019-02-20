@@ -1,6 +1,7 @@
 package com.aispread.admin.controller.meetingNotice;
 
 
+import com.aispread.manager.meetingNotice.dto.MeetingNoticeDTO;
 import com.aispread.manager.meetingNotice.entity.MeetingNoticeEntity;
 import com.aispread.manager.meetingNotice.entity.MeetingReceiptEntity;
 import com.aispread.manager.meetingNotice.mapper.MeetingNoticeMapper;
@@ -58,7 +59,7 @@ public class MeetingNoticeController extends TableController<String, MeetingNoti
             entity.setCreateTime(new Date());
             entity.setCreatorId(currentUser.getId());
             entity.setCreator(currentUser.getUserName());
-            entity.setStatus(MeetingNoticeEntity.Status.已保存);
+//            entity.setStatus(MeetingNoticeEntity.Status.已保存);
         } else {
             //修改
             entity.setUpdateTime(new Date());
@@ -76,20 +77,12 @@ public class MeetingNoticeController extends TableController<String, MeetingNoti
     @ApiOperation("新建会议通知")
     public R<?> save(MeetingNoticeEntity entity) {
         this.beforeSave(entity);
-        String users = entity.getAttendUserId();
-        //判断有参会人员
-        if (StringUtils.isNotBlank(users)) {
-            List<String> userList = Arrays.asList(users.split(","));
-            for (String userID : userList) {
-                MeetingReceiptEntity meetingReceiptEntity = new MeetingReceiptEntity();
-                meetingReceiptEntity.setNoticeId(entity.getId());
-                meetingReceiptEntity.setAttendUserId(userID);
-                meetingReceiptEntity.setReceiptType(MeetingReceiptEntity.ReceiptType.未回执);
-                //插入回执表
-                receiptService.save(meetingReceiptEntity);
-            }
+        if(service.save(entity)) {
+            releaseNotice(entity.getId(), entity.getStatus(), entity.getAttendUserId());
+            return R.ok();
+        }else {
+            return R.fail();
         }
-        return super.save(entity);
     }
 
     @PostMapping("update")
@@ -97,6 +90,7 @@ public class MeetingNoticeController extends TableController<String, MeetingNoti
     public R<?> update(MeetingNoticeEntity entity) {
         this.beforeSave(entity);
         if (service.updateById(entity)) {
+            releaseNotice(entity.getId(), entity.getStatus(), entity.getAttendUserId());
             return R.ok();
         } else {
             return R.fail();
@@ -117,9 +111,51 @@ public class MeetingNoticeController extends TableController<String, MeetingNoti
         }
     }
 
-    @Override
-    @ApiOperation("获取会议通知列表")
-    public Object query(HttpServletRequest request) {
+//    @Override
+//    @ApiOperation("查询收到的会议通知")
+//    public Object query(HttpServletRequest request) {
+//        UserEntity currentUser = SecurityUtil.getCurrentUser();
+//        if (null == currentUser) {
+//            throw new BusinessException(R.失败, "用户凭证过期,请尝试重新登录");
+//        }
+//
+//        TableModel<MeetingNoticeEntity> model = new TableModel<>();
+//        Page<MeetingNoticeEntity> page = (Page<MeetingNoticeEntity>) buildPageRequest(request);
+//        if (page == null) {
+//            page = new Page<>(1, 10);
+//        }
+//        QueryWrapper<MeetingNoticeEntity> queryWrapper = buildWrapper(getQueryColumn(request), getQueryValue(request));
+//        if (null == queryWrapper) {
+//            queryWrapper = new QueryWrapper<>();
+//        }
+//        queryWrapper.select("id", "title", "start_time", "end_time", "status", "creator_id", "creator", "create_time");
+//        queryWrapper.like("attend_user_id", currentUser.getId());
+//
+//        model.setData(getService().page(page, buildPageWrapper(queryWrapper, getQueryKey(request), getQuerySearch(request))));
+//
+//        return model;
+//    }
+
+    @PostMapping("queryReceivedNotice")
+    @ApiOperation("查询收到的会议通知列表")
+    public R<?> queryReceivedNotice(MeetingNoticeDTO query){
+        UserEntity currentUser = SecurityUtil.getCurrentUser();
+        if (null == currentUser) {
+            throw new BusinessException(R.失败, "用户凭证过期,请尝试重新登录");
+        }
+        query.setAttendUserId(currentUser.getId());
+        Page<MeetingNoticeDTO> page = new Page<>(query.getPage(), query.getPageSize());
+        return new R(service.getReceivedNotice(page, query));
+    }
+
+    @PostMapping("querySendNotice")
+    @ApiOperation("获取发出的会议通知列表")
+    public Object querySendNotice(HttpServletRequest request){
+        UserEntity currentUser = SecurityUtil.getCurrentUser();
+        if (null == currentUser) {
+            throw new BusinessException(R.失败, "用户凭证过期,请尝试重新登录");
+        }
+
         TableModel<MeetingNoticeEntity> model = new TableModel<>();
         Page<MeetingNoticeEntity> page = (Page<MeetingNoticeEntity>) buildPageRequest(request);
         if (page == null) {
@@ -130,15 +166,29 @@ public class MeetingNoticeController extends TableController<String, MeetingNoti
             queryWrapper = new QueryWrapper<>();
         }
         queryWrapper.select("id", "title", "start_time", "end_time", "status", "creator_id", "creator", "create_time");
-        queryWrapper.ne("status", MeetingNoticeEntity.Status.删除);
-//        queryWrapper.eq("status","");
-//        queryWrapper.like("content", "");
-//        queryWrapper.ge("start_time", "" + " 00:00:00");
-//        queryWrapper.le("end_time", "" + " 23:59:59");
+        queryWrapper.eq("creator_id", currentUser.getId());
 
         model.setData(getService().page(page, buildPageWrapper(queryWrapper, getQueryKey(request), getQuerySearch(request))));
 
         return model;
+
+    }
+
+    private void releaseNotice(String noticeID, Integer status, String users){
+        if(status == MeetingNoticeEntity.Status.已发布){
+            //判断有参会人员
+            if (StringUtils.isNotBlank(users)) {
+                List<String> userList = Arrays.asList(users.split(","));
+                for (String userID : userList) {
+                    MeetingReceiptEntity meetingReceiptEntity = new MeetingReceiptEntity();
+                    meetingReceiptEntity.setNoticeId(noticeID);
+                    meetingReceiptEntity.setAttendUserId(userID);
+                    meetingReceiptEntity.setReceiptType(MeetingReceiptEntity.ReceiptType.未回执);
+                    //插入回执表
+                    receiptService.save(meetingReceiptEntity);
+                }
+            }
+        }
     }
 
     @Autowired
