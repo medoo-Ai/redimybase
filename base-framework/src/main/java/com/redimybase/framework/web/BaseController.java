@@ -280,9 +280,9 @@ public abstract class BaseController<ID extends Serializable, E extends BaseEnti
                 break;
             case "LK":
                 if (andFlag) {
-                    wrapper.like(column, "%" + val + "%");
+                    wrapper.like(column, val);
                 } else {
-                    wrapper.or(w -> w.like(column, "%" + val + "%"));
+                    wrapper.or(w -> w.like(column, val));
                 }
                 break;
             case "NK":
