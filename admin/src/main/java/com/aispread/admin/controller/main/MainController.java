@@ -102,7 +102,7 @@ public class MainController {
         announcementPage.setSize(8);
         announcementPage.setDesc("create_time");
 
-        data.put("announcements", announcementService.page(announcementPage, new QueryWrapper<AnnouncementEntity>().eq("status", AnnouncementEntity.Status.已发布)).getRecords());
+        data.put("announcements", announcementService.page(announcementPage, new QueryWrapper<AnnouncementEntity>().eq("status", AnnouncementEntity.Status.已发布).eq("model",AnnouncementEntity.Model.公司公告)).getRecords());
 
         return new R<>(data);
     }
