@@ -50,6 +50,8 @@ redi:
   file:
     save:
       path: /home/zim_server/mini_files/
+    #下载URL的前缀
+    down-api: http://123.206.207.161:8093/file/download?attachmentId=
 
 
 

@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class PositionController extends TableController<String, PositionEntity, PositionMapper, PositionServiceImpl> {
 
 
-
     @Autowired
     private PositionServiceImpl service;
+
     @Override
     protected PositionServiceImpl getService() {
         return service;

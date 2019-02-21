@@ -90,8 +90,8 @@ public class DocumentController extends TableController<String, DocumentEntity, 
             entity.setCreateTime(new Date());
             entity.setCreator(currentUser.getUserName());
             entity.setCreatorId(currentUser.getId());
-            service.save(entity);
             saveLabel(entity);
+            service.save(entity);
             logEntity.setDocumentId(entity.getId());
             logEntity.setName("添加文档");
             logEntity.setContent(String.format("%s 添加了文档[%s]", currentUser.getUserName(), entity.getName()));
@@ -118,7 +118,7 @@ public class DocumentController extends TableController<String, DocumentEntity, 
      */
     private void saveLabel(DocumentEntity entity) {
         if (StringUtils.isNotBlank(entity.getLabel())) {
-            String[] labelArray = entity.getLabel().split(",");
+            String[] labelArray = entity.getLabel().split("/");
             for (String labelId : labelArray) {
                 DocumentLabelUnionEntity unionEntity = new DocumentLabelUnionEntity();
                 unionEntity.setDocumentId(entity.getId());

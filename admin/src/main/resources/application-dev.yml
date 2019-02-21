@@ -50,6 +50,8 @@ redi:
   file:
     save:
       path: E:/mini_files/
+    #下载URL的前缀
+    down-api: http://localhost:8093/file/download?attachmentId=
 
 
 

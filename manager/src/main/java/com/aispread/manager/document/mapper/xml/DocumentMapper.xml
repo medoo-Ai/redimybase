@@ -3,7 +3,7 @@
 <mapper namespace="com.aispread.manager.document.mapper.DocumentMapper">
 
     <select id="list" resultType="com.aispread.manager.document.entity.DocumentEntity">
-        select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,	t3.suffix_type,
+        select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,	t3.suffix_type,t1.status,
         ( SELECT GROUP_CONCAT(NAME) FROM t_document_label WHERE id IN ( SELECT label_id FROM t_document_label_union
         WHERE document_id = t1.id ) ) AS label
         from t_document
@@ -39,7 +39,7 @@
         <if test="orgId!=null">
             union
 
-            select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,	t3.suffix_type,
+            select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,	t3.suffix_type,t1.status,
             ( SELECT GROUP_CONCAT(NAME) FROM t_document_label WHERE id IN ( SELECT label_id FROM t_document_label_union
             WHERE document_id = t1.id ) ) AS label
             from
@@ -80,7 +80,7 @@
     </select>
 
     <select id="listByFolderId" resultType="com.aispread.manager.document.entity.DocumentEntity">
-        select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,	t3.suffix_type,
+        select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,	t3.suffix_type,t1.status,
         ( SELECT GROUP_CONCAT(NAME) FROM t_document_label WHERE id IN ( SELECT label_id FROM t_document_label_union
         WHERE document_id = t1.id ) ) AS label
         from t_document t1
@@ -116,7 +116,7 @@
 
         union
 
-        select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,	t3.suffix_type,
+        select t1.id,t1.name,t2.name as folder_name,t1.view_range,t1.create_time,	t3.suffix_type,t1.status,
         ( SELECT GROUP_CONCAT(NAME) FROM t_document_label WHERE id IN ( SELECT label_id FROM t_document_label_union
         WHERE document_id = t1.id ) ) AS label
         from t_document
