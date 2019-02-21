@@ -20,7 +20,7 @@ import org.apache.ibatis.annotations.Param;
 public interface AnnouncementMapper extends BaseMapper<AnnouncementEntity> {
 
   AnnouncementListDTO getDTO(String id) throws BusinessException;
-  IPage<AnnouncementListDTO> getDTOList(IPage<TaskMainDTO> page ,@Param("query") AnnouncementQueryDTO query);
+  IPage<AnnouncementListDTO> getDTOList(IPage<AnnouncementListDTO> page ,@Param("query") AnnouncementQueryDTO query);
   boolean switchToAnnouncement(String id);
   boolean switchToImg(String id);
 }

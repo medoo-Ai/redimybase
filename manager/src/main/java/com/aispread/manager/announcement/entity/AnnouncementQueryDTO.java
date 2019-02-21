@@ -1,5 +1,6 @@
 package com.aispread.manager.announcement.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import lombok.Data;
@@ -41,7 +42,7 @@ public class AnnouncementQueryDTO {
    * 发布模块(0:公司公告/1:首页图片)
    */
   @ApiModelProperty(value = "发布模块")
-  private Integer model;
+  private String model;
 
   /**
    * 发布人
@@ -55,6 +56,11 @@ public class AnnouncementQueryDTO {
   @ApiModelProperty(value = "发布人名称")
   private String releaseUserName;
 
+  /**
+   * 是否置顶
+   */
+  @ApiModelProperty(value = "是否置顶")
+  private String istop;
 
   /**
    * 发布时间-开始时间

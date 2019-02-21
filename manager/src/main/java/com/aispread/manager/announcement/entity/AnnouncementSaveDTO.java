@@ -45,6 +45,12 @@ public class AnnouncementSaveDTO {
   private Integer imgSort;
 
   /**
+   * 是否置顶
+   */
+  @ApiModelProperty(value = "是否置顶")
+  private String istop;
+
+  /**
    * 轮播图片ID
    */
   @ApiModelProperty(value = "轮播图片ID")

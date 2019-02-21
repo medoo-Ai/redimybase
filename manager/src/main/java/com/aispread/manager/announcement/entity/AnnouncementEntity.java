@@ -134,6 +134,13 @@ public class AnnouncementEntity extends IdEntity<String> {
   @ApiModelProperty(value = "app轮播ID")
   private String appBannerId;
 
+  /**
+   * 是否置顶
+   */
+  @TableField("istop")
+  @ApiModelProperty(value = "是否置顶")
+  private String istop;
+
   public String getId() {
     return id;
   }

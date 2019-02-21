@@ -4,7 +4,7 @@
 
   <select id="getDTOList" resultType="com.aispread.manager.announcement.entity.AnnouncementListDTO">
     SELECT
-      t1.id,t1.title,t1.model,t1.content,t1.attachment_id as attachmentId, t1.release_user as releaseUser,t2.user_name as releaseUserName,
+      t1.id,t1.istop,t1.title,t1.model,t1.content,t1.attachment_id as attachmentId, t1.release_user as releaseUser,t2.user_name as releaseUserName,
       t1.release_time as releaseTime,t1.status,t1.create_time as createTime,t1.creator_id as creatorId,t3.user_name as creatorName,
       t1.update_time as updateTime,t1.updater_id as updaterId,t4.user_name as updateName,t1.app_banner_id as appBannerId,t5.sort as imgSort
     FROM
@@ -23,7 +23,7 @@
 
     <if test="(query.model != null) and (query.model != '')">
       <![CDATA[
-          and t1.model = #{query.model,jdbcType=INTEGER}
+          and t1.model = #{query.model,jdbcType=VARCHAR}
       ]]>
     </if>
 
@@ -60,7 +60,7 @@
 
   <select id="getDTO" resultType="com.aispread.manager.announcement.entity.AnnouncementListDTO" parameterType="string">
     SELECT
-    t1.id,t1.title,t1.model,t1.content,t1.attachment_id as attachmentId, t1.release_user as releaseUser,t2.user_name as releaseUserName,
+    t1.id,t1.istop,t1.title,t1.model,t1.content,t1.attachment_id as attachmentId, t1.release_user as releaseUser,t2.user_name as releaseUserName,
     t1.release_time as releaseTime,t1.status,t1.create_time as createTime,t1.creator_id as creatorId,t3.user_name as creatorName,
     t1.update_time as updateTime,t1.updater_id as updaterId,t4.user_name as updateName,t1.app_banner_id as appBannerId,t5.sort as imgSort
     FROM

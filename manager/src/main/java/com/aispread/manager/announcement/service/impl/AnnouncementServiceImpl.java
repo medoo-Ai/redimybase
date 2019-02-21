@@ -144,7 +144,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
     entity.setContent(dto.getContent());
     entity.setAttachmentId(dto.getAttachmentId());
     entity.setStatus(dto.getStatus());
-
+    entity.setIstop(dto.getIstop());
     entity.setModel(Model.图片公告);
     /*entity.setReleaseUser(SecurityUtil.getCurrentUserId());*/
     entity.setAppBannerId(appBannerEntity.getId());
@@ -184,6 +184,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
       byId.setStatus(dto.getStatus());
       byId.setAttachmentId(dto.getAttachmentId());
       byId.setTitle(dto.getTitle());
+      byId.setIstop(dto.getIstop());
       updateById(byId);
       return true;
     }
@@ -244,6 +245,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
     entity.setAttachmentId(dto.getAttachmentId());
     entity.setAppBannerId(dto.getAppBannerId());
     entity.setStatus(dto.getStatus());
+    entity.setIstop(dto.getIstop());
     /*校验*/
       if(StringUtils.isBlank(entity.getTitle())){
         throw new BusinessException(R.失败,"title(标题)不能为空.");
@@ -280,6 +282,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
       entity.setModel(dto.getModel());
       entity.setContent(dto.getContent());
       entity.setStatus(dto.getStatus());
+      entity.setIstop(dto.getIstop());
       return updateById(entity);
     }
     /*else if(model == Model.图片公告){
@@ -316,7 +319,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
    * @param query
    * @return
    */
-  public IPage<AnnouncementListDTO> getDTOList(IPage<TaskMainDTO> page ,AnnouncementQueryDTO query){
+  public IPage<AnnouncementListDTO> getDTOList(IPage<AnnouncementListDTO> page ,AnnouncementQueryDTO query){
     return baseMapper.getDTOList(page,query);
   }
 

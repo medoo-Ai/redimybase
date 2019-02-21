@@ -92,6 +92,8 @@ public class AppBannerEntity extends IdEntity<String> {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+
+
     public String getId() {
         return id;
     }

@@ -3,7 +3,7 @@ package com.aispread.manager.meetingNotice.dto;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Created by Felix
@@ -36,7 +36,7 @@ public class MeetingNoticeReceiptDTO implements Serializable {
     /**
      * 回执时间
      */
-    private LocalDateTime receiptTime;
+    private Date receiptTime;
 
     /**
      * 回执状态(0.未回执,1.参加,2.不参加)
