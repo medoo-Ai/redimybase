@@ -79,15 +79,16 @@ public class UserController extends TableController<String, UserEntity, UserMapp
         UserExtEntity userExtEntity = userExtService.getOne(new QueryWrapper<UserExtEntity>().eq("user_id", currentUser.getId()));
 
         UserInfoDTO userInfoDTO = new UserInfoDTO();
-        userInfoDTO.setAddress(userExtEntity.getAddress());
+        if (userExtEntity != null) {
+            userInfoDTO.setAddress(userExtEntity.getAddress());
+            //生日
+            userInfoDTO.setBirthday(userExtEntity.getBirthday());
+            userInfoDTO.setStation(userExtEntity.getStation());
+        }
 
         if (StringUtils.isNotBlank(currentUser.getIdNo())) {
-
-            String idNo = currentUser.getIdNo();
             userInfoDTO.setIdNo(currentUser.getIdNo());
         }
-        //生日
-        userInfoDTO.setBirthday(userExtEntity.getBirthday());
         UserOrgEntity userOrgEntity = userOrgService.getOne(new QueryWrapper<UserOrgEntity>().eq("user_id", currentUser.getId()).select("id,org_id"));
         if (userOrgEntity != null) {
             OrgEntity orgEntity = orgService.getOne(new QueryWrapper<OrgEntity>().eq("id", userOrgEntity.getOrgId()).select("id,name"));
@@ -99,12 +100,12 @@ public class UserController extends TableController<String, UserEntity, UserMapp
             PositionEntity positionEntity = positionService.getOne(new QueryWrapper<PositionEntity>().eq("id", userPositionEntity.getPositionId()).select("id,name"));
             userInfoDTO.setPositionName(positionEntity.getName());
         }
+        userInfoDTO.setTelephone(currentUser.getTelephone());
         userInfoDTO.setSex(currentUser.getSex());
         userInfoDTO.setUserName(currentUser.getUserName());
         userInfoDTO.setAvatarUrl(currentUser.getAvatarUrl());
         userInfoDTO.setPhone(currentUser.getPhone());
         userInfoDTO.setEmail(currentUser.getEmail());
-        userInfoDTO.setStation(userExtEntity.getStation());
         userInfoDTO.setCreateTime(currentUser.getCreateTime());
         return new R<>(userInfoDTO);
     }

@@ -53,5 +53,8 @@ public class UserInfoDTO implements Serializable {
 
     @ApiModelProperty("头像")
     private String avatarUrl;
+
+    @ApiModelProperty("座机")
+    private String telephone;
 }
 
