@@ -23,6 +23,8 @@ public interface ResourceMapper extends BaseMapper<ResourceEntity> {
     List<String> getResNameList(String userId);
     List<ResourceEntity> getResourceByUserId(@Param("userId") String userId,@Param("button") Integer button);
     List<ResourceEntity> getResourceByRoleId(@Param("roleId") String roleId);
+
+    List<ResourceEntity> getResourceTreeByRoleId(@Param("roleId") String roleId,@Param("button") Integer button);
     List<Ztree> resourceTreeList();
 
     List<ResourceEntity> resourceDtoTreeList();

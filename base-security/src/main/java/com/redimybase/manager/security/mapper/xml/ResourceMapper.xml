@@ -91,4 +91,47 @@
     <select id="resourceDtoTreeList" resultType="com.redimybase.manager.security.entity.ResourceEntity">
          select distinct res.id as id,res.name,res.parent_id,res.configure,res.type,res.sort,res.creator_id,res.creator,res.reviser_id,res.reviser,res.create_time,res.update_time from t_resource res join t_role_resource rr on rr.resource_id=res.id join t_user_role ur on ur.role_id=rr.role_id and TYPE=1
     </select>
+    <select id="getResourceTreeByRoleId" resultType="com.redimybase.manager.security.entity.ResourceEntity">
+        SELECT
+        t.id,
+        t.NAME,
+        t.parent_id,
+        t.configure,
+        t.type,
+        t.sort,
+        t.creator_id,
+        t.creator,
+        t.reviser_id,
+        t.reviser,
+        t.create_time,
+        t.update_time
+        FROM
+        (
+        SELECT
+        t2.id AS id,
+        t2.NAME,
+        t2.parent_id,
+        t2.configure,
+        t2.type,
+        t2.sort,
+        t2.creator_id,
+        t2.creator,
+        t2.reviser_id,
+        t2.reviser,
+        t2.create_time,
+        t2.update_time
+        FROM
+        t_resource t2
+        WHERE
+        t2.id IN (
+        SELECT resource_id FROM t_role_resource t1
+
+        WHERE t1.role_id = #{roleId,jdbcType=VARCHAR}
+        )
+        OR t2.id IN ( SELECT parent_id FROM t_resource t3 WHERE t3.id IN ( SELECT resource_id FROM t_role_resource t1 WHERE t1.role_id = #{roleId,jdbcType=VARCHAR} ) )
+        ) t
+        <if test="button==0">
+            where t.type=1
+        </if>
+    </select>
 </mapper>

@@ -29,4 +29,10 @@ public interface ResourceService extends IService<ResourceEntity> {
      */
     List<ResourceDto> menuNodeList();
 
+    /**
+     * 获取指定用户的菜单树
+     * 只能返回二级以内菜单
+     */
+    List<ResourceDto> menuNodeListByUserId(String userId,Integer button);
+
 }

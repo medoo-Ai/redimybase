@@ -96,7 +96,7 @@ public class SecurityController {
         R<Map<String, Object>> result = new R<>();
         Map<String, Object> data = new HashMap<>();
         data.put("user", SecurityUtil.getCurrentUser());
-        data.put("resources", resourceService.getMenuByUserId(SecurityUtil.getCurrentUserId(),0));
+        data.put("resources", resourceService.menuNodeListByUserId(SecurityUtil.getCurrentUserId(),0));
         result.setData(data);
         return result;
     }
