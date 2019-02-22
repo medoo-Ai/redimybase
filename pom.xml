@@ -66,7 +66,7 @@
         <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-        <spring.version> 5.0.7.RELEASE</spring.version>
+        <spring.version>5.0.7.RELEASE</spring.version>
         <spring.data.commons.version>2.0.7.RELEASE</spring.data.commons.version>
         <lombok.version>1.16.20</lombok.version>
         <apache.common.version>3.5</apache.common.version>
@@ -365,11 +365,11 @@
                 <artifactId>base-common</artifactId>
                 <version>${redimybase.framework.version}</version>
             </dependency>
-         <!--   <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-servlet-api</artifactId>
-                <version>${tomcat.servlet.version}</version>
-            </dependency>-->
+            <!--   <dependency>
+                   <groupId>org.apache.tomcat</groupId>
+                   <artifactId>tomcat-servlet-api</artifactId>
+                   <version>${tomcat.servlet.version}</version>
+               </dependency>-->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
@@ -400,7 +400,7 @@
 
 
     <build>
-        <finalName>mini_picc</finalName>
+        <finalName>${artifactId}-${version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

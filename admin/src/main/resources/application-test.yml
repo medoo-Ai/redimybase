@@ -61,6 +61,9 @@ flowable:
   common:
     app:
       idm-url: a
-
+  cmmn:
+    enabled: false
+  dmn:
+    enabled: false
 
 
