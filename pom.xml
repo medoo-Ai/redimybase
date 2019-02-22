@@ -83,7 +83,7 @@
         <commons3.version>3.7</commons3.version>
         <java.mail.version>1.4.7</java.mail.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <log4j.version>2.10.0</log4j.version>
+        <!--<log4j.version>2.10.0</log4j.version>-->
         <spring.kafka.version>1.0.0.RC1</spring.kafka.version>
         <kafka.vesion>0.9.0.1</kafka.vesion>
         <akka.version>2.5.11</akka.version>
